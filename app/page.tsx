@@ -2,9 +2,9 @@
 
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 export default function Home() {
   const { user } = useDynamicContext();
@@ -38,9 +38,11 @@ export default function Home() {
             </div>
             <div className="mt-16 flow-root">
               <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
-                <img
+        <Image
                   src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect fill='%23f9fafb' width='800' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23bc4a4b'%3EDashboard Preview%3C/text%3E%3C/svg%3E"
                   alt="BlockCity Dashboard"
+                  width={800}
+                  height={400}
                   className="rounded-md shadow-2xl ring-1 ring-gray-900/10 w-full"
                 />
               </div>
@@ -448,8 +450,8 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-gray-600">
-                  "BlockCity transformed our customer loyalty program. Our customers love earning real Bitcoin, 
-                  and we've seen a 40% increase in repeat purchases since implementing it."
+                  &ldquo;BlockCity transformed our customer loyalty program. Our customers love earning real Bitcoin, 
+                  and we&apos;ve seen a 40% increase in repeat purchases since implementing it.&rdquo;
                 </p>
               </CardContent>
             </Card>
@@ -464,8 +466,8 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-gray-600">
-                  "Setting up was incredibly simple. Within a day, we were rewarding customers with Bitcoin. 
-                  The platform is intuitive and our customers absolutely love it."
+                  &ldquo;Setting up was incredibly simple. Within a day, we were rewarding customers with Bitcoin. 
+                  The platform is intuitive and our customers absolutely love it.&rdquo;
                 </p>
               </CardContent>
             </Card>
@@ -480,8 +482,8 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-gray-600">
-                  "Finally, a rewards program that gives me something valuable! I've earned over $500 in Bitcoin 
-                  just from my regular shopping. It's amazing watching my rewards grow."
+                  &ldquo;Finally, a rewards program that gives me something valuable! I&apos;ve earned over $500 in Bitcoin 
+                  just from my regular shopping. It&apos;s amazing watching my rewards grow.&rdquo;
                 </p>
               </CardContent>
             </Card>
