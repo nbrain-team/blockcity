@@ -1,0 +1,108 @@
+// BlockCity Rewards Platform Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  COMPANY_ADMIN
+  SUPER_ADMIN
+}
+
+enum StakeStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  FAILED
+}
+
+enum TransactionType {
+  PURCHASE
+  REWARD
+  STAKE
+  WITHDRAWAL
+}
+
+model Company {
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  walletAddress   String?  @unique
+  rewardRate      Float    @default(0.01) // 1% default
+  totalStaked     Float    @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  users           User[]
+  transactions    Transaction[]
+  stakes          Stake[]
+}
+
+model User {
+  id              String   @id @default(cuid())
+  dynamicUserId   String?  @unique
+  email           String   @unique
+  firstName       String?
+  lastName        String?
+  walletAddress   String?  @unique
+  role            UserRole @default(CUSTOMER)
+  companyId       String?
+  totalRewards    Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  company         Company? @relation(fields: [companyId], references: [id])
+  transactions    Transaction[]
+  stakes          Stake[]
+}
+
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String
+  companyId       String
+  type            TransactionType
+  amount          Float
+  btcAmount       Float?
+  btcPrice        Float?
+  description     String?
+  txHash          String?
+  createdAt       DateTime        @default(now())
+
+  user            User     @relation(fields: [userId], references: [id])
+  company         Company  @relation(fields: [companyId], references: [id])
+  
+  @@index([userId])
+  @@index([companyId])
+  @@index([createdAt])
+}
+
+model Stake {
+  id              String      @id @default(cuid())
+  userId          String
+  companyId       String
+  amount          Float
+  btcAmount       Float
+  btcPrice        Float
+  status          StakeStatus @default(PENDING)
+  lockPeriod      Int         @default(30) // days
+  startDate       DateTime?
+  endDate         DateTime?
+  txHash          String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id])
+  company         Company  @relation(fields: [companyId], references: [id])
+  
+  @@index([userId])
+  @@index([companyId])
+  @@index([status])
+}

@@ -1,103 +1,100 @@
-import Image from "next/image";
+'use client';
+
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { user } = useDynamicContext();
+  const router = useRouter();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="py-20">
+        <div className="text-center">
+          <h1 className="text-5xl font-bold text-gray-900 sm:text-6xl">
+            Reward Your Customers with{' '}
+            <span className="text-[#bc4a4b]">Bitcoin</span>
+          </h1>
+          <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl mx-auto">
+            BlockCity enables companies to incentivize their customers by staking Bitcoin 
+            for every purchase they make. Build loyalty, drive sales, and embrace the future 
+            of rewards.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-6">
+            <div className="text-sm text-gray-500">
+              Connect your wallet to get started
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Bitcoin Staking</CardTitle>
+              <CardDescription>
+                Automatically stake BTC for customers based on their purchases
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">
+                Set your own reward rate and let BlockCity handle the staking process. 
+                Customers earn real Bitcoin rewards that grow over time.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Secure Wallets</CardTitle>
+              <CardDescription>
+                Powered by Dynamic.xyz for enterprise-grade security
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">
+                Each customer gets a secure, non-custodial wallet. Your rewards are safe 
+                and accessible only to you.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Real-Time Tracking</CardTitle>
+              <CardDescription>
+                Monitor transactions, stakes, and rewards in real-time
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">
+                Complete visibility into your rewards program with detailed analytics 
+                and reporting.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="mt-20">
+          <Card className="bg-gradient-to-r from-[#bc4a4b] to-[#a03f40] border-none">
+            <CardHeader>
+              <CardTitle className="text-white text-2xl">
+                Ready to transform your loyalty program?
+              </CardTitle>
+              <CardDescription className="text-white/80">
+                Connect your wallet to access the dashboard and start rewarding your customers
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
