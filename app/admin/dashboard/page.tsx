@@ -71,7 +71,13 @@ export default function AdminDashboard() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="text-2xl font-bold text-white">BlockCity</div>
+              <Image 
+                src="/block-logo.png" 
+                alt="BlockCity Logo" 
+                width={150} 
+                height={40}
+                className="h-10 w-auto"
+              />
               <Badge>Admin</Badge>
             </div>
             <Button variant="outline" onClick={handleLogout} className="text-white border-gray-600 hover:bg-gray-800">

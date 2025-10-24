@@ -33,7 +33,13 @@ export default function PreviewPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-8">
-              <div className="text-2xl font-bold text-white">BlockCity</div>
+              <Image 
+                src="/block-logo.png" 
+                alt="BlockCity Logo" 
+                width={150} 
+                height={40}
+                className="h-10 w-auto"
+              />
               <nav className="hidden md:flex gap-6">
                 <span className="text-sm font-medium text-white border-b-2 border-[#FF5C1C] pb-4">Dashboard</span>
                 <span className="text-sm font-medium text-gray-300 hover:text-white cursor-pointer">Rewards</span>

@@ -32,8 +32,14 @@ export default function CompanyLoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="text-3xl font-bold text-gray-900 mb-4">
-            BlockCity
+          <div className="flex justify-center mb-4">
+            <Image 
+              src="/block-logo.png" 
+              alt="BlockCity Logo" 
+              width={200} 
+              height={60}
+              className="h-16 w-auto"
+            />
           </div>
           <CardTitle>Company Login</CardTitle>
           <CardDescription>Manage your rewards program</CardDescription>

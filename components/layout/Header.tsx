@@ -14,9 +14,13 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
-              <div className="text-2xl font-bold text-white">
-                BlockCity
-              </div>
+              <Image 
+                src="/block-logo.png" 
+                alt="BlockCity Logo" 
+                width={150} 
+                height={40}
+                className="h-10 w-auto"
+              />
             </Link>
             {user && (
               <nav className="hidden md:flex gap-6">
