@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   const { user } = useDynamicContext();
@@ -39,14 +40,14 @@ export default function Home() {
               </div>
               <div className="mt-16 mx-auto max-w-6xl">
                 <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
-                  <Image
+        <Image
                     src="/dashboard-preview.png"
                     alt="BlockCity Dashboard - Bitcoin Rewards Platform"
                     width={1920}
                     height={1080}
                     className="rounded-md shadow-2xl ring-1 ring-gray-900/10 w-full"
-                    priority
-                  />
+          priority
+        />
                 </div>
               </div>
             </div>
@@ -512,7 +513,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="text-2xl font-bold text-white mb-4">BlockCity</div>
               <p className="text-gray-400 text-sm">
@@ -525,16 +526,15 @@ export default function Home() {
                 <li><a href="#" className="hover:text-white">Features</a></li>
                 <li><a href="#" className="hover:text-white">Pricing</a></li>
                 <li><a href="#" className="hover:text-white">Security</a></li>
-                <li><a href="#" className="hover:text-white">Roadmap</a></li>
+                <li><a href="/preview" className="hover:text-white">Demo</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Company</h3>
+              <h3 className="text-white font-semibold mb-4">Access</h3>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white">About</a></li>
-                <li><a href="#" className="hover:text-white">Blog</a></li>
-                <li><a href="#" className="hover:text-white">Careers</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
+                <li><Link href="/admin/login" className="hover:text-white">Admin Login</Link></li>
+                <li><Link href="/company/login" className="hover:text-white">Company Login</Link></li>
+                <li><Link href="/" className="hover:text-white">Customer Login</Link></li>
               </ul>
             </div>
             <div>
