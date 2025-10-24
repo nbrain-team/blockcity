@@ -36,14 +36,15 @@ export default function Home() {
                 Connect your wallet to get started
               </div>
             </div>
-            <div className="mt-16 flow-root w-full max-w-5xl">
+            <div className="mt-16 flow-root w-full max-w-6xl">
               <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
                 <Image
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect fill='%23f9fafb' width='800' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23bc4a4b'%3EDashboard Preview%3C/text%3E%3C/svg%3E"
-                  alt="BlockCity Dashboard"
-                  width={800}
-                  height={400}
+                  src="/dashboard-preview.png"
+                  alt="BlockCity Dashboard - Bitcoin Rewards Platform"
+                  width={1920}
+                  height={1080}
                   className="rounded-md shadow-2xl ring-1 ring-gray-900/10 w-full"
+                  priority
                 />
               </div>
             </div>
