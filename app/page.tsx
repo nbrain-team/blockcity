@@ -19,33 +19,35 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white min-h-screen flex items-center">
-        <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 py-32 sm:py-40">
-          <div className="flex flex-col items-center justify-center text-center">
-            <h1 className="text-7xl sm:text-8xl md:text-9xl font-extrabold tracking-tight text-gray-900 mb-8 leading-tight">
-              Reward Your Customers
-              <br />
-              <span className="text-[#bc4a4b]">with Bitcoin</span>
-            </h1>
-            <p className="mt-8 text-xl leading-8 text-gray-600 max-w-3xl mx-auto sm:text-2xl">
-              BlockCity enables companies to incentivize customers by staking Bitcoin for every purchase. 
-              Build loyalty, drive sales, and embrace the future of rewards.
-            </p>
-            <div className="mt-12 flex items-center justify-center gap-6">
-              <div className="text-base text-gray-500">
-                Connect your wallet to get started
+      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white min-h-screen flex items-center justify-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center">
+              <h1 className="font-extrabold tracking-tight text-gray-900 mb-8" style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', lineHeight: '1.1' }}>
+                Reward Your Customers
+                <br />
+                <span className="text-[#bc4a4b]">with Bitcoin</span>
+              </h1>
+              <p className="mt-8 text-xl leading-8 text-gray-600 max-w-3xl mx-auto sm:text-2xl">
+                BlockCity enables companies to incentivize customers by staking Bitcoin for every purchase. 
+                Build loyalty, drive sales, and embrace the future of rewards.
+              </p>
+              <div className="mt-12 flex items-center justify-center gap-6">
+                <div className="text-base text-gray-500">
+                  Connect your wallet to get started
+                </div>
               </div>
-            </div>
-            <div className="mt-16 flow-root w-full max-w-6xl">
-              <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
-                <Image
-                  src="/dashboard-preview.png"
-                  alt="BlockCity Dashboard - Bitcoin Rewards Platform"
-                  width={1920}
-                  height={1080}
-                  className="rounded-md shadow-2xl ring-1 ring-gray-900/10 w-full"
-                  priority
-                />
+              <div className="mt-16 mx-auto max-w-6xl">
+                <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
+                  <Image
+                    src="/dashboard-preview.png"
+                    alt="BlockCity Dashboard - Bitcoin Rewards Platform"
+                    width={1920}
+                    height={1080}
+                    className="rounded-md shadow-2xl ring-1 ring-gray-900/10 w-full"
+                    priority
+                  />
+                </div>
               </div>
             </div>
           </div>
