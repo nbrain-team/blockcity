@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { validateCredentials, setAuthSession } from '@/lib/auth';
+import Image from 'next/image';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -31,7 +32,15 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="text-3xl font-bold text-[#bc4a4b] mb-2">BlockCity</div>
+          <div className="flex justify-center mb-4">
+            <Image 
+              src="/blockcity-logo.webp" 
+              alt="BlockCity Logo" 
+              width={200} 
+              height={60}
+              className="h-12 w-auto"
+            />
+          </div>
           <CardTitle>Admin Login</CardTitle>
           <CardDescription>God Mode - Manage Companies</CardDescription>
         </CardHeader>

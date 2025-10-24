@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { getAuthSession, clearAuthSession } from '@/lib/auth';
+import Image from 'next/image';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -66,14 +67,20 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
+      <header className="border-b border-gray-800 bg-gray-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="text-2xl font-bold text-[#bc4a4b]">BlockCity</div>
+              <Image 
+                src="/blockcity-logo.webp" 
+                alt="BlockCity Logo" 
+                width={150} 
+                height={40}
+                className="h-8 w-auto"
+              />
               <Badge>Admin</Badge>
             </div>
-            <Button variant="outline" onClick={handleLogout}>
+            <Button variant="outline" onClick={handleLogout} className="text-white border-gray-600 hover:bg-gray-800">
               Logout
             </Button>
           </div>

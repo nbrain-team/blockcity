@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export default function PreviewPage() {
   const stats = {
@@ -28,19 +29,25 @@ export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
+      <header className="border-b border-gray-800 bg-gray-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-8">
-              <div className="text-2xl font-bold text-[#bc4a4b]">BlockCity</div>
+              <Image 
+                src="/blockcity-logo.webp" 
+                alt="BlockCity Logo" 
+                width={150} 
+                height={40}
+                className="h-8 w-auto"
+              />
               <nav className="hidden md:flex gap-6">
-                <span className="text-sm font-medium text-[#bc4a4b] border-b-2 border-[#bc4a4b] pb-4">Dashboard</span>
-                <span className="text-sm font-medium text-gray-700 hover:text-[#bc4a4b]">Rewards</span>
-                <span className="text-sm font-medium text-gray-700 hover:text-[#bc4a4b]">Transactions</span>
+                <span className="text-sm font-medium text-white border-b-2 border-[#bc4a4b] pb-4">Dashboard</span>
+                <span className="text-sm font-medium text-gray-300 hover:text-white cursor-pointer">Rewards</span>
+                <span className="text-sm font-medium text-gray-300 hover:text-white cursor-pointer">Transactions</span>
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <div className="hidden sm:block text-sm text-gray-600">john@example.com</div>
+              <div className="hidden sm:block text-sm text-gray-300">john@example.com</div>
               <div className="h-8 w-8 rounded-full bg-[#bc4a4b] flex items-center justify-center text-white text-sm font-semibold">
                 JD
               </div>
