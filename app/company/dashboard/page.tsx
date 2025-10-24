@@ -49,17 +49,11 @@ export default function CompanyDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-900">
+      <header className="border-b border-[#1B0031] bg-[#0A0A0A]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
-              <Image 
-                src="/blockcity-logo.webp" 
-                alt="BlockCity Logo" 
-                width={150} 
-                height={40}
-                className="h-8 w-auto"
-              />
+              <div className="text-2xl font-bold text-white">BlockCity</div>
               <Badge variant="secondary">Company</Badge>
             </div>
             <Button variant="outline" onClick={handleLogout} className="text-white border-gray-600 hover:bg-gray-800">

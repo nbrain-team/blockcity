@@ -20,36 +20,28 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white min-h-screen flex items-center justify-center">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center">
-              <h1 className="font-extrabold tracking-tight text-gray-900 mb-8" style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', lineHeight: '1.1' }}>
-                Reward Your Customers
-                <br />
-                <span className="text-[#bc4a4b]">with Bitcoin</span>
-              </h1>
-              <p className="mt-8 text-xl leading-8 text-gray-600 max-w-3xl mx-auto sm:text-2xl">
-                BlockCity enables companies to incentivize customers by staking Bitcoin for every purchase. 
-                Build loyalty, drive sales, and embrace the future of rewards.
-              </p>
-              <div className="mt-12 flex items-center justify-center gap-6">
-                <div className="text-base text-gray-500">
-                  Connect your wallet to get started
-                </div>
-              </div>
-              <div className="mt-16 mx-auto max-w-6xl">
-                <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
-        <Image
-                    src="/dashboard-preview.png"
-                    alt="BlockCity Dashboard - Bitcoin Rewards Platform"
-                    width={1920}
-                    height={1080}
-                    className="rounded-md shadow-2xl ring-1 ring-gray-900/10 w-full"
-          priority
-        />
-                </div>
-              </div>
+      <section className="relative overflow-hidden bg-white py-20 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <h1 className="text-center text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl mb-8 w-full">
+              Reward Your Customers <span className="text-[#FF5C1C]">with Bitcoin</span>
+            </h1>
+            <p className="text-center mt-6 text-xl leading-8 text-gray-600 mx-auto max-w-3xl">
+              BlockCity enables companies to incentivize customers by staking Bitcoin for every purchase. 
+              Build loyalty, drive sales, and embrace the future of rewards.
+            </p>
+            <div className="text-center mt-10 text-sm text-gray-500">
+              Connect your wallet to get started
+            </div>
+            <div className="mt-16">
+              <Image
+                src="/hero.png"
+                alt="BlockCity Dashboard - Bitcoin Rewards Platform"
+                width={1920}
+                height={1080}
+                className="rounded-xl shadow-2xl w-full"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -75,7 +67,7 @@ export default function Home() {
       <section className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-base font-semibold text-[#bc4a4b]">Features</h2>
+            <h2 className="text-base font-semibold text-[#FF5C1C]">Features</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Enterprise-grade Bitcoin rewards
               <br />
@@ -86,7 +78,7 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
             <Card>
               <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-[#bc4a4b] flex items-center justify-center mb-4">
+                <div className="h-12 w-12 rounded-lg bg-[#FF5C1C] flex items-center justify-center mb-4">
                   <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
                   </svg>
@@ -108,7 +100,7 @@ export default function Home() {
 
             <Card>
               <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-[#bc4a4b] flex items-center justify-center mb-4">
+                <div className="h-12 w-12 rounded-lg bg-[#FF5C1C] flex items-center justify-center mb-4">
                   <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                   </svg>
@@ -130,7 +122,7 @@ export default function Home() {
 
             <Card>
               <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-[#bc4a4b] flex items-center justify-center mb-4">
+                <div className="h-12 w-12 rounded-lg bg-[#FF5C1C] flex items-center justify-center mb-4">
                   <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
                   </svg>
@@ -157,7 +149,7 @@ export default function Home() {
       <section className="py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-base font-semibold text-[#bc4a4b]">How It Works</h2>
+            <h2 className="text-base font-semibold text-[#FF5C1C]">How It Works</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Simple setup, powerful results
             </p>
@@ -165,7 +157,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             <div className="relative">
-              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#bc4a4b] text-white text-2xl font-bold mx-auto mb-4">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#FF5C1C] text-white text-2xl font-bold mx-auto mb-4">
                 1
               </div>
               <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
@@ -177,7 +169,7 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#bc4a4b] text-white text-2xl font-bold mx-auto mb-4">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#FF5C1C] text-white text-2xl font-bold mx-auto mb-4">
                 2
               </div>
               <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
@@ -189,7 +181,7 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#bc4a4b] text-white text-2xl font-bold mx-auto mb-4">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#FF5C1C] text-white text-2xl font-bold mx-auto mb-4">
                 3
               </div>
               <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
@@ -201,7 +193,7 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#bc4a4b] text-white text-2xl font-bold mx-auto mb-4">
+              <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#FF5C1C] text-white text-2xl font-bold mx-auto mb-4">
                 4
               </div>
               <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
@@ -227,7 +219,7 @@ export default function Home() {
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -243,7 +235,7 @@ export default function Home() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -259,7 +251,7 @@ export default function Home() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -275,7 +267,7 @@ export default function Home() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -299,7 +291,7 @@ export default function Home() {
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -315,7 +307,7 @@ export default function Home() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -331,7 +323,7 @@ export default function Home() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -347,7 +339,7 @@ export default function Home() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-lg bg-[#bc4a4b] flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-lg bg-[#FF5C1C] flex items-center justify-center">
                       <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -371,7 +363,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 items-center">
             <div>
-              <h2 className="text-base font-semibold text-[#bc4a4b]">Security</h2>
+              <h2 className="text-base font-semibold text-[#FF5C1C]">Security</h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
                 Security is our first and top priority
               </p>
@@ -423,7 +415,7 @@ export default function Home() {
             </div>
             <div className="rounded-2xl bg-gray-100 p-8 flex items-center justify-center min-h-[400px]">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-[#bc4a4b] mb-4">
+                <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-[#FF5C1C] mb-4">
                   <svg className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                   </svg>
@@ -496,7 +488,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-[#bc4a4b] to-[#a03f40]">
+      <section className="py-24 bg-gradient-to-r from-[#FF5C1C] to-[#e54e15]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Ready to revolutionize your rewards program?
@@ -550,7 +542,7 @@ export default function Home() {
             <div className="flex flex-col items-center gap-4 mb-6">
               <a 
                 href="/preview" 
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#bc4a4b] text-white rounded-lg hover:bg-[#a03f40] transition-colors font-semibold"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#FF5C1C] text-white rounded-lg hover:bg-[#e54e15] transition-colors font-semibold"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />

@@ -29,26 +29,20 @@ export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-900">
+      <header className="border-b border-[#1B0031] bg-[#0A0A0A]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-8">
-              <Image 
-                src="/blockcity-logo.webp" 
-                alt="BlockCity Logo" 
-                width={150} 
-                height={40}
-                className="h-8 w-auto"
-              />
+              <div className="text-2xl font-bold text-white">BlockCity</div>
               <nav className="hidden md:flex gap-6">
-                <span className="text-sm font-medium text-white border-b-2 border-[#bc4a4b] pb-4">Dashboard</span>
+                <span className="text-sm font-medium text-white border-b-2 border-[#FF5C1C] pb-4">Dashboard</span>
                 <span className="text-sm font-medium text-gray-300 hover:text-white cursor-pointer">Rewards</span>
                 <span className="text-sm font-medium text-gray-300 hover:text-white cursor-pointer">Transactions</span>
               </nav>
             </div>
             <div className="flex items-center gap-4">
               <div className="hidden sm:block text-sm text-gray-300">john@example.com</div>
-              <div className="h-8 w-8 rounded-full bg-[#bc4a4b] flex items-center justify-center text-white text-sm font-semibold">
+              <div className="h-8 w-8 rounded-full bg-[#FF5C1C] flex items-center justify-center text-white text-sm font-semibold">
                 JD
               </div>
             </div>
@@ -157,13 +151,13 @@ export default function PreviewPage() {
 
         {/* Quick Actions */}
         <div className="mt-8">
-          <Card className="bg-gradient-to-r from-[#bc4a4b] to-[#a03f40] border-none">
+          <Card className="bg-gradient-to-r from-[#FF5C1C] to-[#e54e15] border-none">
             <CardHeader>
               <CardTitle className="text-white text-xl">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex gap-4">
-                <Button variant="secondary" className="bg-white text-[#bc4a4b] hover:bg-gray-100">
+                <Button variant="secondary" className="bg-white text-[#FF5C1C] hover:bg-gray-100">
                   Make a Purchase
                 </Button>
                 <Button variant="secondary" className="bg-white/20 text-white hover:bg-white/30">
