@@ -19,10 +19,10 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-32 sm:py-40">
-          <div className="text-center">
-            <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-8xl lg:text-9xl mb-8">
+      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white min-h-screen flex items-center">
+        <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 py-32 sm:py-40">
+          <div className="flex flex-col items-center justify-center text-center">
+            <h1 className="text-7xl sm:text-8xl md:text-9xl font-extrabold tracking-tight text-gray-900 mb-8 leading-tight">
               Reward Your Customers
               <br />
               <span className="text-[#bc4a4b]">with Bitcoin</span>
@@ -36,9 +36,9 @@ export default function Home() {
                 Connect your wallet to get started
               </div>
             </div>
-            <div className="mt-16 flow-root">
+            <div className="mt-16 flow-root w-full max-w-5xl">
               <div className="relative rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10">
-        <Image
+                <Image
                   src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect fill='%23f9fafb' width='800' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23bc4a4b'%3EDashboard Preview%3C/text%3E%3C/svg%3E"
                   alt="BlockCity Dashboard"
                   width={800}
