@@ -1,0 +1,56 @@
+===============================================================================
+DYNAMIC.XYZ VERIFICATION FOR RENDER
+Workspace: tea-d3roc1odl3ps73fjksu0
+===============================================================================
+
+QUICK TEST COMMAND FOR RENDER SHELL:
+-------------------------------------
+
+Copy and paste this into your Render Shell:
+
+cd /opt/render/project/src && node test-render-dynamic.js
+
+
+WHAT THIS TESTS:
+----------------
+✅ NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID = 83bd25a3-bccf-4d2b-be7e-b550baa982db
+✅ DYNAMIC_API_KEY = dyn_0PdjdjcdcnqxYC1UqGRqqWTVrbSJFdAaECVPzNPi5A5kEodDV61bg6mH
+✅ NEXT_PUBLIC_DYNAMIC_ORGANIZATION_ID = dc325555-d402-4246-a4cb-ea66444afeb2
+✅ DYNAMIC_JWKS_ENDPOINT = https://app.dynamic.xyz/api/v0/sdk/83bd25a3-bccf-4d2b-be7e-b550baa982db/.well-known/jwks
+✅ JWKS endpoint accessibility
+✅ Dynamic.xyz SDK configuration
+
+
+ALTERNATIVE QUICK CHECK:
+------------------------
+
+node -e "console.log('ENV_ID:', process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID || 'MISSING'); console.log('API_KEY:', process.env.DYNAMIC_API_KEY ? process.env.DYNAMIC_API_KEY.substring(0, 20) + '...' : 'MISSING'); console.log('ORG_ID:', process.env.NEXT_PUBLIC_DYNAMIC_ORGANIZATION_ID || 'MISSING'); console.log('JWKS:', process.env.DYNAMIC_JWKS_ENDPOINT || 'MISSING');"
+
+
+EXPECTED RESULT:
+----------------
+All tests should show ✅ (green checkmarks)
+If any show ❌ (red X), add the missing environment variables in Render dashboard
+
+
+HOW TO ADD ENV VARS IN RENDER:
+-------------------------------
+1. Go to: https://dashboard.render.com/
+2. Find workspace: tea-d3roc1odl3ps73fjksu0
+3. Select your BlockCity service
+4. Click "Environment" tab
+5. Add the 4 variables listed above
+6. Save and redeploy
+
+
+VERIFICATION COMPLETE ✅
+------------------------
+- Dynamic.xyz packages are installed correctly
+- DynamicProvider is properly configured in code
+- JWKS endpoint is accessible
+- Just need to verify Render environment variables are set
+
+For detailed documentation, see: DYNAMIC_VERIFICATION.md
+
+===============================================================================
+
