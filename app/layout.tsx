@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import DynamicProvider from "@/lib/providers/DynamicProvider";
-import Header from "@/components/layout/Header";
+import ConditionalHeader from "@/components/layout/ConditionalHeader";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} antialiased bg-gray-50`}>
         <DynamicProvider>
-          <Header />
+          <ConditionalHeader />
           <main className="min-h-screen">
             {children}
           </main>
