@@ -23,7 +23,7 @@ export default function Home() {
       <section className="relative overflow-hidden bg-white py-20 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
           <div className="mx-auto max-w-6xl">
-            <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl mb-8">
+            <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl mb-8 leading-tight">
               Reward Your Customers <span className="text-[#FF5C1C]">with Bitcoin</span>
             </h1>
             <p className="mt-6 text-xl leading-8 text-gray-600 mx-auto max-w-4xl">
