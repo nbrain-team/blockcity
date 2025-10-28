@@ -76,9 +76,17 @@ export default function CompanyDashboard() {
             <h1 className="text-3xl font-bold text-gray-900">Company Dashboard</h1>
             <p className="mt-2 text-sm text-gray-600">Manage your rewards program and clients</p>
           </div>
-          <Button onClick={() => setShowAddClient(!showAddClient)}>
-            {showAddClient ? 'Cancel' : 'Add Client'}
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline"
+              onClick={() => router.push('/company/dashboard/settings')}
+            >
+              Program Settings
+            </Button>
+            <Button onClick={() => setShowAddClient(!showAddClient)}>
+              {showAddClient ? 'Cancel' : 'Add Client'}
+            </Button>
+          </div>
         </div>
 
         {showAddClient && (

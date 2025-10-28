@@ -34,10 +34,17 @@ model Company {
   id              String   @id @default(cuid())
   name            String
   email           String   @unique
+  username        String?  @unique // URL slug for landing page
   walletAddress   String?  @unique
   rewardRate      Float    @default(0.01) // 1% default
   totalStaked     Float    @default(0)
   isActive        Boolean  @default(true)
+  
+  // Program Settings
+  programName     String?
+  programDetails  String?
+  logoUrl         String?
+  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
