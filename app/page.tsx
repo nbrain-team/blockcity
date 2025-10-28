@@ -522,11 +522,32 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Access</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/admin/login" className="hover:text-white">Admin Login</Link></li>
-                <li><Link href="/company/login" className="hover:text-white">Company Login</Link></li>
-                <li><Link href="/" className="hover:text-white">Customer Login</Link></li>
+              <h3 className="text-white font-semibold mb-4">Portal Access</h3>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <Link href="/admin/login" className="text-gray-400 hover:text-[#FF5C1C] transition-colors flex items-center gap-2">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                    Admin Login (God Mode)
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/company/login" className="text-gray-400 hover:text-[#FF5C1C] transition-colors flex items-center gap-2">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                    </svg>
+                    Company Login
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/" className="text-gray-400 hover:text-[#FF5C1C] transition-colors flex items-center gap-2">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+                    </svg>
+                    Customer Login (Wallet)
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
