@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 /**
  * Debug page to verify environment variables are available on the client
  * Visit: https://your-app.onrender.com/test-env
@@ -56,7 +58,7 @@ export default function TestEnvPage() {
               <ol className="text-sm text-red-800 space-y-2 list-decimal list-inside">
                 <li>Go to Render dashboard</li>
                 <li>Verify NEXT_PUBLIC_* environment variables are set</li>
-                <li>Click "Manual Deploy" → "Deploy latest commit"</li>
+                <li>Click &quot;Manual Deploy&quot; → &quot;Deploy latest commit&quot;</li>
                 <li>Wait for build to complete</li>
                 <li>Refresh this page</li>
               </ol>
@@ -78,12 +80,12 @@ export default function TestEnvPage() {
           )}
 
           <div className="mt-6 text-center">
-            <a 
+            <Link 
               href="/"
               className="text-blue-600 hover:text-blue-800 font-semibold"
             >
               ← Back to Home
-            </a>
+            </Link>
           </div>
         </div>
       </div>

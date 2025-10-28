@@ -31,24 +31,29 @@ export default function ProgramSettings() {
       router.push('/company/login');
     } else {
       setIsAuthenticated(true);
-      setCompanyId(session.companyId || '');
-      loadSettings(session.companyId || '');
+      // For demo: fetch the first/demo company from the database
+      loadCompanyAndSettings();
     }
   }, [router]);
 
-  const loadSettings = async (id: string) => {
+  const loadCompanyAndSettings = async () => {
     try {
-      const response = await fetch(`/api/companies/settings?companyId=${id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setCompanyName(data.name || '');
-        setUsername(data.username || '');
-        setProgramName(data.programName || '');
-        setProgramDetails(data.programDetails || '');
-        setLogoUrl(data.logoUrl || '');
+      // Fetch companies to get the first company (demo mode)
+      const companiesResponse = await fetch('/api/companies');
+      if (companiesResponse.ok) {
+        const companies = await companiesResponse.json();
+        if (companies && companies.length > 0) {
+          const company = companies[0];
+          setCompanyId(company.id);
+          setCompanyName(company.name || '');
+          setUsername(company.username || '');
+          setProgramName(company.programName || '');
+          setProgramDetails(company.programDetails || '');
+          setLogoUrl(company.logoUrl || '');
+        }
       }
     } catch (error) {
-      console.error('Error loading settings:', error);
+      console.error('Error loading company settings:', error);
     } finally {
       setLoading(false);
     }

@@ -25,6 +25,7 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
     if (user && primaryWallet) {
       createUserAccount();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, primaryWallet]);
 
   const createUserAccount = async () => {
@@ -66,6 +67,7 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
               {company.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img 
                   src={company.logoUrl} 
                   alt={`${company.name} Logo`}
@@ -128,13 +130,13 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
                   <span className="flex-shrink-0 w-6 h-6 bg-[#bc4a4b] text-white rounded-full flex items-center justify-center text-sm font-bold">
                     1
                   </span>
-                  <span>Click "Connect Wallet" above to link your crypto wallet</span>
+                  <span>Click &quot;Connect Wallet&quot; above to link your crypto wallet</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-[#bc4a4b] text-white rounded-full flex items-center justify-center text-sm font-bold">
                     2
                   </span>
-                  <span>Complete the sign-up process to join {company.name}'s rewards program</span>
+                  <span>Complete the sign-up process to join {company.name}&apos;s rewards program</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-[#bc4a4b] text-white rounded-full flex items-center justify-center text-sm font-bold">
@@ -179,6 +181,7 @@ export default function CompanyLandingPage() {
 
   useEffect(() => {
     loadCompany();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   const loadCompany = async () => {
@@ -215,7 +218,7 @@ export default function CompanyLandingPage() {
           <CardHeader>
             <CardTitle>Company Not Found</CardTitle>
             <CardDescription>
-              The company you're looking for doesn't exist or hasn't set up their rewards program yet.
+              The company you&apos;re looking for doesn&apos;t exist or hasn&apos;t set up their rewards program yet.
             </CardDescription>
           </CardHeader>
           <CardContent>
