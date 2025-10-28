@@ -22,11 +22,11 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-white py-20 sm:py-32">
         <div className="flex flex-col items-center justify-center px-6 lg:px-8">
-          <div className="max-w-4xl w-full">
-            <h1 className="text-center text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl mb-8">
+          <div className="max-w-6xl w-full">
+            <h1 className="text-center text-6xl font-bold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl mb-8">
               Reward Your Customers <span className="text-[#FF5C1C]">with Bitcoin</span>
             </h1>
-            <p className="text-center mt-6 text-xl leading-8 text-gray-600">
+            <p className="text-center mt-6 text-xl leading-8 text-gray-600 max-w-4xl mx-auto">
               BlockCity enables companies to incentivize customers by staking Bitcoin for every purchase. 
               Build loyalty, drive sales, and embrace the future of rewards.
             </p>
