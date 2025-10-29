@@ -15,7 +15,7 @@ export const COMPANY_CREDENTIALS = {
 export const ROGUE_VANS_CREDENTIALS = {
   username: 'roguevans',
   password: '123456',
-  role: 'company',
+  role: 'brand', // Updated to use brand terminology
 };
 
 export function validateCredentials(username: string, password: string) {
@@ -23,15 +23,21 @@ export function validateCredentials(username: string, password: string) {
     return { valid: true, role: 'admin', username };
   }
   
+  // Support both 'company' and 'brand' for backward compatibility
   if (username === COMPANY_CREDENTIALS.username && password === COMPANY_CREDENTIALS.password) {
-    return { valid: true, role: 'company', username };
+    return { valid: true, role: 'brand', username }; // Return 'brand' role
   }
   
   if (username === ROGUE_VANS_CREDENTIALS.username && password === ROGUE_VANS_CREDENTIALS.password) {
-    return { valid: true, role: 'company', username };
+    return { valid: true, role: 'brand', username };
   }
   
   return { valid: false, role: null, username: null };
+}
+
+// Helper to check if user is a brand/company
+export function isBrandRole(role: string | null) {
+  return role === 'brand' || role === 'company';
 }
 
 export function setAuthSession(role: string, username: string) {

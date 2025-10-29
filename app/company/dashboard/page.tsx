@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { getAuthSession, clearAuthSession } from '@/lib/auth';
+import { getAuthSession, clearAuthSession, isBrandRole } from '@/lib/auth';
 import Image from 'next/image';
 
 interface CompanyData {
@@ -39,8 +39,8 @@ export default function CompanyDashboard() {
 
   useEffect(() => {
     const session = getAuthSession();
-    if (!session || session.role !== 'company') {
-      router.push('/company/login');
+    if (!session || !isBrandRole(session.role)) {
+      router.push('/brand/login'); // Redirect to unified brand login
     } else {
       setIsAuthenticated(true);
       loadCompanyData(session.username);

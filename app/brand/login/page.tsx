@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { validateCredentials, setAuthSession } from '@/lib/auth';
 import Image from 'next/image';
 
-export default function CompanyLoginPage() {
+export default function BrandLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,12 +20,12 @@ export default function CompanyLoginPage() {
 
     const result = validateCredentials(username, password);
     
-    // Accept both 'company' and 'brand' roles (unified system)
-    if (result.valid && (result.role === 'company' || result.role === 'brand')) {
-      setAuthSession('brand', username); // Store as 'brand' for unified system
-      router.push('/brand/dashboard'); // Redirect to new brand dashboard
+    // Accept both 'company' and 'brand' roles
+    if (result.valid && (result.role === 'brand' || result.role === 'company')) {
+      setAuthSession('brand', username);
+      router.push('/brand/dashboard');
     } else {
-      setError('Invalid company credentials');
+      setError('Invalid brand credentials');
     }
   };
 
@@ -55,7 +55,7 @@ export default function CompanyLoginPage() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="client"
+                placeholder="Enter your username"
                 required
               />
             </div>
@@ -67,7 +67,7 @@ export default function CompanyLoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="client"
+                placeholder="Enter your password"
                 required
               />
             </div>

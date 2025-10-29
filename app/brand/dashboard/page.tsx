@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { getAuthSession, isBrandRole } from '@/lib/auth';
 
 interface BrandDashboardData {
   brand: {
@@ -54,29 +56,68 @@ interface BrandDashboardData {
 }
 
 export default function BrandDashboardPage() {
+  const router = useRouter();
   const [data, setData] = useState<BrandDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // TODO: Replace with actual brand ID from auth
-    const brandId = 'demo-brand-id';
+    // Check authentication
+    const session = getAuthSession();
+    if (!session || !isBrandRole(session.role)) {
+      router.push('/brand/login');
+      return;
+    }
     
-    Promise.all([
-      fetch(`/api/analytics?type=brand&brandId=${brandId}`).then(r => r.json()),
-      fetch(`/api/purchase-orders?brandId=${brandId}`).then(r => r.json()),
-    ]).then(([analytics, orders]) => {
+    setIsAuthenticated(true);
+    loadBrandData(session.username);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+
+  const loadBrandData = async (username: string) => {
+    setLoading(true);
+    
+    // First, get brand/company by username
+    const brandId = await getBrandIdByUsername(username);
+    
+    if (!brandId) {
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      const [analytics, orders] = await Promise.all([
+        fetch(`/api/analytics?type=brand&brandId=${brandId}`).then(r => r.json()),
+        fetch(`/api/purchase-orders?brandId=${brandId}`).then(r => r.json()),
+      ]);
+      
       setData({
         ...analytics.analytics,
         recentOrders: orders.orders?.slice(0, 5) || [],
       });
-      setLoading(false);
-    }).catch(err => {
+    } catch (err) {
       console.error('Error loading dashboard:', err);
+    } finally {
       setLoading(false);
-    });
-  }, []);
+    }
+  };
 
-  if (loading) {
+  const getBrandIdByUsername = async (username: string): Promise<string | null> => {
+    try {
+      // Try to get brand from companies API (old system)
+      const response = await fetch(`/api/companies/public?username=${username}`);
+      if (response.ok) {
+        const data = await response.json();
+        return data.id;
+      }
+      return null;
+    } catch (err) {
+      console.error('Error fetching brand:', err);
+      return null;
+    }
+  };
+
+  if (!isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-lg">Loading dashboard...</div>
@@ -87,7 +128,9 @@ export default function BrandDashboardPage() {
   if (!data) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-red-600">Failed to load dashboard</div>
+        <div className="text-lg text-red-600">
+          Failed to load dashboard. Make sure your brand account exists.
+        </div>
       </div>
     );
   }
