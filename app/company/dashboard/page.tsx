@@ -9,9 +9,29 @@ import { Badge } from '@/components/ui/badge';
 import { getAuthSession, clearAuthSession } from '@/lib/auth';
 import Image from 'next/image';
 
+interface CompanyData {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  rewardRate: number;
+  totalStaked: number;
+  users: Array<{
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    walletAddress: string | null;
+    totalRewards: number;
+    createdAt: string;
+  }>;
+}
+
 export default function CompanyDashboard() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [company, setCompany] = useState<CompanyData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [showAddClient, setShowAddClient] = useState(false);
   const [clientEmail, setClientEmail] = useState('');
   const [clientFirstName, setClientFirstName] = useState('');
@@ -23,8 +43,30 @@ export default function CompanyDashboard() {
       router.push('/company/login');
     } else {
       setIsAuthenticated(true);
+      loadCompanyData(session.username);
     }
   }, [router]);
+
+  const loadCompanyData = async (username: string) => {
+    try {
+      // Get company by username
+      const response = await fetch(`/api/companies/public?username=${username}`);
+      if (!response.ok) throw new Error('Failed to load company');
+      
+      const publicData = await response.json();
+      
+      // Get full company data with users
+      const fullResponse = await fetch(`/api/companies?companyId=${publicData.id}`);
+      if (!fullResponse.ok) throw new Error('Failed to load company details');
+      
+      const fullData = await fullResponse.json();
+      setCompany(fullData);
+    } catch (error) {
+      console.error('Error loading company data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = () => {
     clearAuthSession();
@@ -42,9 +84,34 @@ export default function CompanyDashboard() {
     setShowAddClient(false);
   };
 
-  if (!isAuthenticated) {
-    return null;
+  if (!isAuthenticated || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    );
   }
+
+  if (!company) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>Company Not Found</CardTitle>
+            <CardDescription>Unable to load company data.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => router.push('/company/login')}>
+              Back to Login
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const totalClients = company.users?.length || 0;
+  const activeStakes = 0; // TODO: Calculate from stakes data
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -73,7 +140,7 @@ export default function CompanyDashboard() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Company Dashboard</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{company.name} Dashboard</h1>
             <p className="mt-2 text-sm text-gray-600">Manage your rewards program and clients</p>
           </div>
           <div className="flex gap-3">
@@ -144,28 +211,28 @@ export default function CompanyDashboard() {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Total Clients</CardDescription>
-              <CardTitle className="text-3xl">0</CardTitle>
+              <CardTitle className="text-3xl">{totalClients}</CardTitle>
             </CardHeader>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Total Staked</CardDescription>
-              <CardTitle className="text-3xl">0.00 BTC</CardTitle>
+              <CardTitle className="text-3xl">{company.totalStaked.toFixed(2)} BTC</CardTitle>
             </CardHeader>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Active Stakes</CardDescription>
-              <CardTitle className="text-3xl">0</CardTitle>
+              <CardTitle className="text-3xl">{activeStakes}</CardTitle>
             </CardHeader>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Reward Rate</CardDescription>
-              <CardTitle className="text-3xl">1.0%</CardTitle>
+              <CardTitle className="text-3xl">{(company.rewardRate * 100).toFixed(1)}%</CardTitle>
             </CardHeader>
           </Card>
         </div>
@@ -173,13 +240,50 @@ export default function CompanyDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Client List</CardTitle>
-            <CardDescription>Clients using wallet login</CardDescription>
+            <CardDescription>Clients who signed up through your invite page</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-12 text-gray-500">
-              <p>No clients yet</p>
-              <p className="text-sm mt-2">Add clients who will login with their crypto wallets</p>
-            </div>
+            {totalClients === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                <p>No clients yet</p>
+                <p className="text-sm mt-2">Share your invite page: https://blockcityfi.com/company/{company.username}</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="border-b border-gray-200">
+                    <tr>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-700">Name</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-700">Email</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-700">Wallet</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-700">Total Rewards</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-700">Joined</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {company.users.map((client) => (
+                      <tr key={client.id} className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-sm">
+                          {client.firstName && client.lastName 
+                            ? `${client.firstName} ${client.lastName}`
+                            : 'N/A'}
+                        </td>
+                        <td className="py-3 px-4 text-sm">{client.email}</td>
+                        <td className="py-3 px-4 text-sm font-mono text-xs">
+                          {client.walletAddress 
+                            ? `${client.walletAddress.slice(0, 6)}...${client.walletAddress.slice(-4)}`
+                            : 'N/A'}
+                        </td>
+                        <td className="py-3 px-4 text-sm">{client.totalRewards.toFixed(4)} BTC</td>
+                        <td className="py-3 px-4 text-sm">
+                          {new Date(client.createdAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
