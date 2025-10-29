@@ -86,9 +86,46 @@ export default function BrandDashboardPage() {
     }
     
     try {
+      const [analyticsRes, ordersRes] = await Promise.all([
+        fetch(`/api/analytics?type=brand&brandId=${brandId}`),
+        fetch(`/api/purchase-orders?brandId=${brandId}`),
+      ]);
+      
+      // Check if APIs returned errors (likely migration not run)
+      if (!analyticsRes.ok || !ordersRes.ok) {
+        console.error('API error - migration may not have been run yet');
+        // Use fallback data structure
+        setData({
+          brand: {
+            id: brandId,
+            name: username,
+            displayName: username.charAt(0).toUpperCase() + username.slice(1),
+            tvl: 0,
+            totalFollowers: 0,
+          },
+          metrics: {
+            totalPostsCreated: 0,
+            totalLikesReceived: 0,
+            totalOrdersReceived: 0,
+            totalRevenue: 0,
+            activeCustomers: 0,
+            boostingFollowers: 0,
+            totalBoostPrincipal: 0,
+            engagementRate: '0',
+            newFollowers: 0,
+            retentionRate: '0',
+          },
+          topProducts: [],
+          activeCampaigns: [],
+          recentOrders: [],
+        });
+        setLoading(false);
+        return;
+      }
+      
       const [analytics, orders] = await Promise.all([
-        fetch(`/api/analytics?type=brand&brandId=${brandId}`).then(r => r.json()),
-        fetch(`/api/purchase-orders?brandId=${brandId}`).then(r => r.json()),
+        analyticsRes.json(),
+        ordersRes.json(),
       ]);
       
       setData({
@@ -97,6 +134,31 @@ export default function BrandDashboardPage() {
       });
     } catch (err) {
       console.error('Error loading dashboard:', err);
+      // Set fallback data
+      setData({
+        brand: {
+          id: brandId,
+          name: username,
+          displayName: username.charAt(0).toUpperCase() + username.slice(1),
+          tvl: 0,
+          totalFollowers: 0,
+        },
+        metrics: {
+          totalPostsCreated: 0,
+          totalLikesReceived: 0,
+          totalOrdersReceived: 0,
+          totalRevenue: 0,
+          activeCustomers: 0,
+          boostingFollowers: 0,
+          totalBoostPrincipal: 0,
+          engagementRate: '0',
+          newFollowers: 0,
+          retentionRate: '0',
+        },
+        topProducts: [],
+        activeCampaigns: [],
+        recentOrders: [],
+      });
     } finally {
       setLoading(false);
     }
@@ -127,19 +189,55 @@ export default function BrandDashboardPage() {
 
   if (!data) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-red-600">
-          Failed to load dashboard. Make sure your brand account exists.
-        </div>
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <Card className="max-w-2xl p-8">
+          <div className="text-center">
+            <div className="text-4xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold text-red-600 mb-4">
+              Database Migration Required
+            </h2>
+            <p className="text-gray-600 mb-6">
+              The Rev2 database tables haven&apos;t been created yet. Please run the migration command in Render Shell:
+            </p>
+            <div className="bg-gray-900 text-white p-4 rounded-lg mb-6 text-left font-mono text-sm">
+              cd bcity && npx prisma migrate deploy
+            </div>
+            <p className="text-sm text-gray-500">
+              After running the migration, refresh this page.
+            </p>
+          </div>
+        </Card>
       </div>
     );
   }
 
+  const showMigrationWarning = data.metrics.totalPostsCreated === 0 && 
+                                data.metrics.totalOrdersReceived === 0 &&
+                                data.recentOrders.length === 0;
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* Migration Warning Banner */}
+      {showMigrationWarning && (
+        <Card className="mb-6 p-4 bg-yellow-50 border-yellow-200">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">⚠️</div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-yellow-900 mb-1">Migration May Be Pending</h3>
+              <p className="text-sm text-yellow-800 mb-2">
+                If you just deployed, run this command in Render Shell:
+              </p>
+              <code className="text-xs bg-yellow-100 px-2 py-1 rounded">
+                cd bcity && npx prisma migrate deploy
+              </code>
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{data.brand.displayName || data.brand.name}</h1>
+        <h1 className="text-3xl font-bold mb-2">{data.brand?.displayName || data.brand?.name || 'Brand Dashboard'}</h1>
         <p className="text-gray-600">Brand Dashboard & Analytics</p>
       </div>
 
