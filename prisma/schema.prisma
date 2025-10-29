@@ -1,4 +1,4 @@
-// BlockCity Rewards Platform Database Schema
+// BlockCity Rewards Platform Database Schema - Enhanced for Rev2
 
 generator client {
   provider = "prisma-client-js"
@@ -10,10 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================
+// ENUMS
+// ============================================
+
 enum UserRole {
   CUSTOMER
-  COMPANY_ADMIN
+  BRAND_ADMIN
   SUPER_ADMIN
+}
+
+enum UserType {
+  CUSTOMER
+  BRAND
+  BOTH
 }
 
 enum StakeStatus {
@@ -28,22 +38,101 @@ enum TransactionType {
   REWARD
   STAKE
   WITHDRAWAL
+  DEPOSIT
+  YIELD_DISTRIBUTION
+  SWAP
 }
+
+enum TokenType {
+  BTC
+  USDC
+  cbBTC
+}
+
+enum BoostType {
+  BOOST_ME          // Yield to self
+  BOOST_BRAND       // Customer -> Brand
+  BOOST_CUSTOMER    // Brand -> Customer
+  BOOST_NETWORK     // Brand -> Reward Pool
+}
+
+enum PostType {
+  STANDARD
+  CAMPAIGN
+  PRODUCT
+}
+
+enum EngagementType {
+  LIKE
+  DISLIKE
+}
+
+enum CustomerLevel {
+  LEVEL_0    // $0
+  LEVEL_1    // $100
+  LEVEL_2    // $1000
+  LEVEL_3    // $10000
+}
+
+enum OrderStatus {
+  CONTRACT_SIGNED
+  DEPOSIT_RECEIVED
+  BTC_REBATE_ISSUED
+  IN_PRODUCTION
+  BEING_DELIVERED
+  DELIVERED
+}
+
+enum PointsActivityType {
+  REACT_POST
+  REFER_USER
+  DAILY_LOGIN
+  LOGIN_STREAK_2_WEEKS
+  LOGIN_STREAK_1_MONTH
+  SWAP_5K
+  SWAP_10K
+  DEPOSIT_STREAK
+}
+
+// ============================================
+// CORE MODELS
+// ============================================
 
 model Company {
   id              String   @id @default(cuid())
   name            String
   email           String   @unique
-  username        String?  @unique // URL slug for landing page
+  username        String?  @unique // URL slug: blockcityfi.com/username
   walletAddress   String?  @unique
   rewardRate      Float    @default(0.01) // 1% default
   totalStaked     Float    @default(0)
   isActive        Boolean  @default(true)
   
+  // BitProfile Fields
+  profileId       String?  @unique // 21-40 alphanumeric unique ID
+  displayName     String?
+  bio             String?  @db.Text
+  bannerUrl       String?
+  logoUrl         String?
+  
+  // TVL & Metrics
+  tvl             Float    @default(0) // Total Value Locked
+  tvlGrowthRate   Float    @default(0) // Percentage
+  totalPosts      Int      @default(0)
+  totalLikes      Int      @default(0)
+  totalFollowers  Int      @default(0)
+  totalFollowing  Int      @default(0)
+  monthlyYieldEarned   Float @default(0) // BTC earned per month
+  monthlyYieldDistributed Float @default(0) // BTC distributed per month
+  
   // Program Settings
   programName     String?
-  programDetails  String?
-  logoUrl         String?
+  programDetails  String?  @db.Text
+  
+  // Level Thresholds (custom per brand)
+  level1Threshold Float    @default(100)
+  level2Threshold Float    @default(1000)
+  level3Threshold Float    @default(10000)
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -51,43 +140,103 @@ model Company {
   users           User[]
   transactions    Transaction[]
   stakes          Stake[]
+  wallets         Wallet[]
+  posts           Post[]
+  products        Product[]
+  campaigns       Campaign[]
+  boostsGiven     Boost[]      @relation("BrandBoosts")
+  boostsReceived  Boost[]      @relation("BrandReceivesBoosts")
+  followers       Follow[]     @relation("BrandFollowers")
+  following       Follow[]     @relation("BrandFollowing")
+  purchaseOrders  PurchaseOrder[]
 }
 
 model User {
-  id              String   @id @default(cuid())
-  dynamicUserId   String?  @unique
-  email           String   @unique
+  id              String    @id @default(cuid())
+  dynamicUserId   String?   @unique
+  email           String    @unique
   firstName       String?
   lastName        String?
-  walletAddress   String?  @unique
-  role            UserRole @default(CUSTOMER)
+  walletAddress   String?   @unique
+  role            UserRole  @default(CUSTOMER)
+  userType        UserType  @default(CUSTOMER)
   companyId       String?
-  totalRewards    Float    @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  totalRewards    Float     @default(0)
+  
+  // BitProfile Fields
+  profileId       String?   @unique // 21-40 alphanumeric unique ID
+  displayName     String?
+  bio             String?   @db.Text
+  bannerUrl       String?
+  profilePictureUrl String?
+  
+  // TVL & Metrics
+  tvl             Float     @default(0) // Total Value Locked
+  tvlGrowthRate   Float     @default(0)
+  totalPosts      Int       @default(0)
+  totalLikes      Int       @default(0)
+  totalFollowers  Int       @default(0)
+  totalFollowing  Int       @default(0)
+  monthlyYieldEarned   Float @default(0)
+  monthlyYieldDistributed Float @default(0)
+  
+  // Gamification
+  totalPoints     Int       @default(0)
+  currentLevel    CustomerLevel @default(LEVEL_0)
+  loginStreak     Int       @default(0)
+  lastLoginDate   DateTime?
+  
+  // Referral
+  referralCode    String?   @unique
+  referredById    String?
+  maxInvitesPerWeek Int     @default(5)
+  invitesUsedThisWeek Int   @default(0)
+  weekResetDate   DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  company         Company? @relation(fields: [companyId], references: [id])
+  company         Company?  @relation(fields: [companyId], references: [id])
+  referredBy      User?     @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals       User[]    @relation("UserReferrals")
+  
   transactions    Transaction[]
   stakes          Stake[]
+  wallets         Wallet[]
+  deposits        Deposit[]
+  posts           Post[]
+  postEngagements PostEngagement[]
+  boostsGiven     Boost[]   @relation("UserBoosts")
+  boostsReceived  Boost[]   @relation("UserReceivesBoosts")
+  followers       Follow[]  @relation("UserFollowers")
+  following       Follow[]  @relation("UserFollowing")
+  points          Points[]
+  purchaseOrders  PurchaseOrder[]
+  yieldDistributions YieldDistribution[]
 }
 
 model Transaction {
   id              String          @id @default(cuid())
   userId          String
-  companyId       String
+  companyId       String?
   type            TransactionType
   amount          Float
+  tokenType       TokenType       @default(BTC)
   btcAmount       Float?
   btcPrice        Float?
   description     String?
   txHash          String?
+  fromAddress     String?
+  toAddress       String?
+  gasFeePaid      Float?
   createdAt       DateTime        @default(now())
 
   user            User     @relation(fields: [userId], references: [id])
-  company         Company  @relation(fields: [companyId], references: [id])
+  company         Company? @relation(fields: [companyId], references: [id])
   
   @@index([userId])
   @@index([companyId])
+  @@index([type])
   @@index([createdAt])
 }
 
@@ -112,4 +261,379 @@ model Stake {
   @@index([userId])
   @@index([companyId])
   @@index([status])
+}
+
+// ============================================
+// WALLET & TREASURY
+// ============================================
+
+model Wallet {
+  id              String    @id @default(cuid())
+  userId          String?
+  companyId       String?
+  address         String    @unique
+  tokenType       TokenType
+  balance         Float     @default(0)
+  yieldBalance    Float     @default(0) // Separate tracking for yield
+  principalBalance Float    @default(0) // Principal amount
+  isSmartAccount  Boolean   @default(false)
+  isPrimary       Boolean   @default(false)
+  isExternal      Boolean   @default(false) // User-added external wallet
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User?     @relation(fields: [userId], references: [id])
+  company         Company?  @relation(fields: [companyId], references: [id])
+  deposits        Deposit[]
+  
+  @@index([userId])
+  @@index([companyId])
+  @@index([address])
+}
+
+model Deposit {
+  id              String    @id @default(cuid())
+  userId          String
+  walletId        String
+  amount          Float
+  tokenType       TokenType
+  principalAmount Float     // Always stays with user
+  yieldAmount     Float     @default(0) // Accumulated yield
+  isLentToAave    Boolean   @default(false)
+  aaveDepositTxHash String?
+  boostSetting    BoostType @default(BOOST_ME)
+  withdrawableYield Float   @default(0)
+  lockedUntil     DateTime? // For time-locked deposits
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [userId], references: [id])
+  wallet          Wallet    @relation(fields: [walletId], references: [id])
+  
+  @@index([userId])
+  @@index([walletId])
+  @@index([boostSetting])
+}
+
+// ============================================
+// BOOST SYSTEM
+// ============================================
+
+model Boost {
+  id              String    @id @default(cuid())
+  
+  // Source (who is giving the boost)
+  fromUserId      String?
+  fromBrandId     String?
+  
+  // Target (who is receiving the boost)
+  toUserId        String?
+  toBrandId       String?
+  
+  boostType       BoostType
+  principalAmount Float     // Amount being boosted
+  tokenType       TokenType
+  
+  // For Boost Customer: time-lock settings
+  expiryDate      DateTime?
+  isActive        Boolean   @default(true)
+  levelUpTimer    DateTime? // 24h before rewards kick in
+  
+  // Activity tracking (for Boost Customer)
+  requiredActiveStatus Float @default(90) // Percentage
+  currentActiveStatus  Float @default(0)
+  lastActiveCheck      DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  fromUser        User?     @relation("UserBoosts", fields: [fromUserId], references: [id])
+  toUser          User?     @relation("UserReceivesBoosts", fields: [toUserId], references: [id])
+  fromBrand       Company?  @relation("BrandBoosts", fields: [fromBrandId], references: [id])
+  toBrand         Company?  @relation("BrandReceivesBoosts", fields: [toBrandId], references: [id])
+  
+  @@index([fromUserId])
+  @@index([toUserId])
+  @@index([fromBrandId])
+  @@index([toBrandId])
+  @@index([boostType])
+  @@index([isActive])
+}
+
+model YieldDistribution {
+  id              String    @id @default(cuid())
+  userId          String
+  amount          Float
+  tokenType       TokenType
+  source          String    // "aave", "boost", etc.
+  distributionDate DateTime @default(now())
+  txHash          String?
+  
+  user            User      @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([distributionDate])
+}
+
+// ============================================
+// POSTS & ENGAGEMENT
+// ============================================
+
+model Post {
+  id              String    @id @default(cuid())
+  authorId        String?   // User or Brand
+  brandId         String?
+  postType        PostType  @default(STANDARD)
+  content         String    @db.Text
+  linkUrl         String?
+  
+  // Gamification (for campaigns)
+  isGamified      Boolean   @default(false)
+  rewardPerLike   Float?    // Satoshis per like
+  level0Cap       Int?      // Max likes at Level 0
+  level1Cap       Int?      // Max likes at Level 1
+  level2Cap       Int?      // Max likes at Level 2
+  level3Cap       Int?      // Max likes at Level 3
+  level0Reward    Float?    // Sats per like at Level 0
+  level1Reward    Float?    // Sats per like at Level 1
+  level2Reward    Float?    // Sats per like at Level 2
+  level3Reward    Float?    // Sats per like at Level 3
+  totalRewardPool Float?    // Total sats allocated
+  remainingRewardPool Float? // Remaining sats
+  
+  // Metrics
+  viewCount       Int       @default(0)
+  likeCount       Int       @default(0)
+  dislikeCount    Int       @default(0)
+  shareableLink   String?   @unique
+  
+  // Visibility
+  visibilityLevel CustomerLevel? // Gated content (future)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  author          User?     @relation(fields: [authorId], references: [id])
+  brand           Company?  @relation(fields: [brandId], references: [id])
+  engagements     PostEngagement[]
+  
+  @@index([authorId])
+  @@index([brandId])
+  @@index([postType])
+  @@index([createdAt])
+}
+
+model PostEngagement {
+  id              String         @id @default(cuid())
+  postId          String
+  userId          String
+  engagementType  EngagementType
+  rewardEarned    Float?         // Satoshis earned for this engagement
+  createdAt       DateTime       @default(now())
+
+  post            Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user            User           @relation(fields: [userId], references: [id])
+  
+  @@unique([postId, userId]) // One engagement per user per post
+  @@index([postId])
+  @@index([userId])
+  @@index([engagementType])
+}
+
+model Follow {
+  id              String    @id @default(cuid())
+  followerId      String?   // User following
+  followerBrandId String?   // Brand following
+  followingId     String?   // User being followed
+  followingBrandId String?  // Brand being followed
+  createdAt       DateTime  @default(now())
+
+  followerUser    User?     @relation("UserFollowing", fields: [followerId], references: [id])
+  followingUser   User?     @relation("UserFollowers", fields: [followingId], references: [id])
+  followerBrand   Company?  @relation("BrandFollowing", fields: [followerBrandId], references: [id])
+  followingBrand  Company?  @relation("BrandFollowers", fields: [followingBrandId], references: [id])
+  
+  @@unique([followerId, followingId])
+  @@unique([followerId, followingBrandId])
+  @@unique([followerBrandId, followingId])
+  @@unique([followerBrandId, followingBrandId])
+  @@index([followerId])
+  @@index([followingId])
+  @@index([followerBrandId])
+  @@index([followingBrandId])
+}
+
+// ============================================
+// PRODUCTS & CAMPAIGNS
+// ============================================
+
+model Product {
+  id              String    @id @default(cuid())
+  brandId         String
+  name            String
+  description     String?   @db.Text
+  price           Float
+  sku             String?   @unique
+  btcRebatePercent Float    @default(0) // 1-10% of purchase
+  imageUrl        String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  brand           Company   @relation(fields: [brandId], references: [id])
+  campaigns       Campaign[]
+  purchaseOrders  PurchaseOrder[]
+  
+  @@index([brandId])
+  @@index([sku])
+}
+
+model Campaign {
+  id              String    @id @default(cuid())
+  brandId         String
+  productId       String?
+  name            String
+  description     String?   @db.Text
+  rewardType      TokenType @default(BTC)
+  totalRewardPool Float     // Total BTC/USDC allocated
+  remainingPool   Float     // Remaining rewards
+  
+  // Campaign settings
+  startDate       DateTime?
+  endDate         DateTime?
+  isActive        Boolean   @default(true)
+  
+  // Analytics
+  totalConversions Int      @default(0)
+  totalParticipants Int     @default(0)
+  avgTvlPerCustomer Float   @default(0)
+  totalLtvFiat    Float     @default(0)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  brand           Company   @relation(fields: [brandId], references: [id])
+  product         Product?  @relation(fields: [productId], references: [id])
+  
+  @@index([brandId])
+  @@index([productId])
+  @@index([isActive])
+}
+
+model PurchaseOrder {
+  id              String      @id @default(cuid())
+  userId          String
+  brandId         String
+  productId       String
+  
+  // Order Details
+  orderNumber     String      @unique
+  totalAmount     Float
+  paidAmount      Float       @default(0)
+  remainingAmount Float
+  
+  // BTC Rebate
+  btcRebatePercent Float
+  btcRebateAmount Float       // Principal rebate amount
+  btcRebateIssued Boolean     @default(false)
+  rebateIssuedDate DateTime?
+  
+  // Yield Tracking
+  accumulatedYield Float      @default(0)
+  withdrawableYield Float     @default(0)
+  principalLocked Boolean     @default(true)
+  
+  // Time Lock
+  lockedUntil     DateTime?   // When principal can be withdrawn
+  
+  // Status Tracking
+  status          OrderStatus @default(CONTRACT_SIGNED)
+  
+  // Documents
+  contractUrl     String?
+  depositReceiptUrl String?
+  deliveryProofUrl String?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  deliveredAt     DateTime?
+
+  user            User        @relation(fields: [userId], references: [id])
+  brand           Company     @relation(fields: [brandId], references: [id])
+  product         Product     @relation(fields: [productId], references: [id])
+  journeyEvents   CustomerJourneyEvent[]
+  
+  @@index([userId])
+  @@index([brandId])
+  @@index([productId])
+  @@index([status])
+}
+
+model CustomerJourneyEvent {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  eventType       OrderStatus
+  description     String?
+  documentUrl     String?       // Upload receipt/proof
+  createdAt       DateTime      @default(now())
+
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  
+  @@index([purchaseOrderId])
+  @@index([eventType])
+}
+
+// ============================================
+// GAMIFICATION & POINTS
+// ============================================
+
+model Points {
+  id              String             @id @default(cuid())
+  userId          String
+  activityType    PointsActivityType
+  points          Int
+  description     String?
+  createdAt       DateTime           @default(now())
+
+  user            User               @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([activityType])
+}
+
+// ============================================
+// PROTOCOL SETTINGS
+// ============================================
+
+model ProtocolSettings {
+  id              String    @id @default(cuid())
+  
+  // Yield Split
+  protocolYieldPercent  Float @default(10)  // 10% to protocol
+  userYieldPercent      Float @default(85)  // 85% to users
+  referralYieldPercent  Float @default(5)   // 5% to referrals
+  
+  // Protocol Wallet
+  protocolWalletAddress String?
+  
+  // Token Whitelist
+  allowedTokens   String[] // ["BTC", "USDC", "cbBTC"]
+  
+  // Referral Settings
+  referralsEnabled Boolean  @default(true)
+  maxInvitesPerWeek Int     @default(5)
+  
+  // Reward Distribution
+  rewardDistributionToken TokenType @default(BTC)
+  
+  // Level Up Timer
+  levelUpTimerHours Int     @default(24)
+  
+  // Whitelist
+  whitelistEnabled Boolean  @default(false)
+  whitelistClosedDate DateTime?
+  
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([id])
 }
