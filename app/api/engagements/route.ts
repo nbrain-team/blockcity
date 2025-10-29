@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { EngagementType, CustomerLevel } from '@/lib/generated/prisma';
+import { EngagementType } from '@/lib/generated/prisma';
 import { calculateEngagementReward } from '@/lib/bitprofile';
 
 // POST: Like or dislike a post
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Update post counts and reward pool
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
 
     if (engagementType === EngagementType.LIKE) {
       updateData.likeCount = { increment: 1 };

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0');
 
     if (type === 'customers') {
-      let orderBy: any = { totalPoints: 'desc' }; // Default
+      let orderBy: Record<string, string> = { totalPoints: 'desc' }; // Default
 
       if (sortBy === 'tvl') {
         orderBy = { tvl: 'desc' };
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
       });
 
     } else if (type === 'brands') {
-      let orderBy: any = { tvl: 'desc' }; // Default
+      let orderBy: Record<string, string> = { tvl: 'desc' }; // Default
 
       if (sortBy === 'followers') {
         orderBy = { totalFollowers: 'desc' };

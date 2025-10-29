@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generatePostLink } from '@/lib/bitprofile';
-import { PostType, EngagementType } from '@/lib/generated/prisma';
+import { PostType } from '@/lib/generated/prisma';
 
 // GET: Get posts (feed)
 export async function GET(request: NextRequest) {

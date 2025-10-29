@@ -181,7 +181,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
 
     if (name) updateData.name = name;
     if (description !== undefined) updateData.description = description;

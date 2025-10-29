@@ -1,6 +1,6 @@
 // BitProfile Utility Functions
 
-import { CustomerLevel, UserType } from './generated/prisma';
+import { CustomerLevel } from './generated/prisma';
 
 /**
  * Generate a unique BitProfile ID (21-40 alphanumeric characters)
@@ -143,7 +143,7 @@ export function calculateActiveStatus(
 /**
  * Generate referral code
  */
-export function generateReferralCode(userId: string): string {
+export function generateReferralCode(): string {
   const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `REF${randomStr}`;
 }

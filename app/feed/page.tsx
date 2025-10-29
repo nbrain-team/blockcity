@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
 
 interface Post {
   id: string;
@@ -14,6 +13,10 @@ interface Post {
   viewCount: number;
   isGamified: boolean;
   remainingRewardPool?: number;
+  level0Reward?: number;
+  level1Reward?: number;
+  level2Reward?: number;
+  level3Reward?: number;
   createdAt: string;
   brand: {
     id: string;
@@ -21,17 +24,18 @@ interface Post {
     logoUrl?: string;
     username: string;
   };
-  engagements?: any[];
+  engagements?: Array<{ id: string }>;
 }
 
 export default function FeedPage() {
   const [feedType, setFeedType] = useState<'discover' | 'following' | 'tasks'>('discover');
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userLevel, setUserLevel] = useState('LEVEL_0');
+  const [userLevel] = useState('LEVEL_0');
 
   useEffect(() => {
     loadFeed();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedType]);
 
   const loadFeed = async () => {
@@ -88,14 +92,14 @@ export default function FeedPage() {
     return post.engagements && post.engagements.length > 0;
   };
 
-  const getRewardForLevel = (post: Post) => {
-    if (!post.isGamified) return null;
+  const getRewardForLevel = (post: Post): number => {
+    if (!post.isGamified) return 0;
     
     switch (userLevel) {
-      case 'LEVEL_3': return post['level3Reward' as keyof Post];
-      case 'LEVEL_2': return post['level2Reward' as keyof Post];
-      case 'LEVEL_1': return post['level1Reward' as keyof Post];
-      default: return post['level0Reward' as keyof Post];
+      case 'LEVEL_3': return (post.level3Reward as number) || 0;
+      case 'LEVEL_2': return (post.level2Reward as number) || 0;
+      case 'LEVEL_1': return (post.level1Reward as number) || 0;
+      default: return (post.level0Reward as number) || 0;
     }
   };
 
@@ -185,7 +189,7 @@ export default function FeedPage() {
                       @{post.brand.username} · {new Date(post.createdAt).toLocaleDateString()}
                     </div>
                   </div>
-                  {post.isGamified && (
+                  {post.isGamified && reward > 0 && (
                     <Badge className="bg-green-600 text-white">
                       💰 {reward} sats
                     </Badge>
@@ -230,7 +234,7 @@ export default function FeedPage() {
                         className="btn-primary"
                         size="sm"
                       >
-                        🤍 Like {post.isGamified && `(+${reward} sats)`}
+                        🤍 Like {post.isGamified && reward > 0 && `(+${reward} sats)`}
                       </Button>
                     )}
                     <Button variant="outline" size="sm">

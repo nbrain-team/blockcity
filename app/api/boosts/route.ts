@@ -3,7 +3,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { BoostType, TokenType } from '@/lib/generated/prisma';
-import { hasMetLevelUpTimer } from '@/lib/bitprofile';
 
 // GET: Get boosts
 export async function GET(request: NextRequest) {
@@ -273,7 +272,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       lastActiveCheck: new Date(),
     };
 

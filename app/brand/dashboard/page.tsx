@@ -25,9 +25,32 @@ interface BrandDashboardData {
     newFollowers: number;
     retentionRate: string;
   };
-  topProducts: any[];
-  activeCampaigns: any[];
-  recentOrders: any[];
+  topProducts: Array<{
+    id: string;
+    name: string;
+    price: number;
+    btcRebatePercent: number;
+    imageUrl?: string;
+  }>;
+  activeCampaigns: Array<{
+    id: string;
+    name: string;
+    description?: string;
+    totalRewardPool: number;
+    remainingPool: number;
+    rewardType: string;
+    totalParticipants: number;
+    totalConversions: number;
+  }>;
+  recentOrders: Array<{
+    id: string;
+    orderNumber: string;
+    totalAmount: number;
+    paidAmount: number;
+    btcRebatePercent: number;
+    btcRebateIssued: boolean;
+    status: string;
+  }>;
 }
 
 export default function BrandDashboardPage() {
@@ -134,7 +157,7 @@ export default function BrandDashboardPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {data.recentOrders.map((order: any) => (
+                {data.recentOrders.map((order) => (
                   <div key={order.id} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="font-semibold">Order #{order.orderNumber}</div>
@@ -177,7 +200,7 @@ export default function BrandDashboardPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {data.activeCampaigns.map((campaign: any) => (
+                {data.activeCampaigns.map((campaign) => (
                   <div key={campaign.id} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="font-semibold">{campaign.name}</div>
@@ -264,7 +287,7 @@ export default function BrandDashboardPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                {data.topProducts.map((product: any) => (
+                {data.topProducts.map((product) => (
                   <div key={product.id} className="border rounded-lg p-3">
                     <div className="font-medium text-sm mb-1">{product.name}</div>
                     <div className="flex items-center justify-between text-xs">

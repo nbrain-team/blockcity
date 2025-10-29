@@ -22,8 +22,26 @@ interface CustomerDashboardData {
     totalEngagements: number;
     totalRewardsFromEngagement: number;
   };
-  deposits: any[];
-  brandBoosts: any[];
+  deposits: Array<{
+    id: string;
+    tokenType: string;
+    principalAmount: number;
+    yieldAmount: number;
+    withdrawableYield: number;
+    boostSetting: string;
+    createdAt: string;
+  }>;
+  brandBoosts: Array<{
+    brand: {
+      id: string;
+      name: string;
+      displayName: string;
+      logoUrl?: string;
+    };
+    principal: number;
+    tokenType: string;
+    since: string;
+  }>;
 }
 
 export default function CustomerDashboardPage() {
@@ -174,7 +192,7 @@ export default function CustomerDashboardPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {data.deposits.map((deposit: any) => (
+                {data.deposits.map((deposit) => (
                   <div key={deposit.id} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
@@ -214,7 +232,7 @@ export default function CustomerDashboardPage() {
 
           {/* Brand Boosts */}
           <Card className="p-6">
-            <h2 className="text-xl font-bold mb-6">Brands You're Boosting</h2>
+            <h2 className="text-xl font-bold mb-6">Brands You&apos;re Boosting</h2>
             
             {data.brandBoosts.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
@@ -223,7 +241,7 @@ export default function CustomerDashboardPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {data.brandBoosts.map((boost: any) => (
+                {data.brandBoosts.map((boost) => (
                   <div key={boost.brand.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {boost.brand.logoUrl && (

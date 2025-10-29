@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
     if (action === 'generate') {
       // Generate referral code for user
       if (!user.referralCode) {
-        const newReferralCode = generateReferralCode(userId);
+        const newReferralCode = generateReferralCode();
 
         const updatedUser = await prisma.user.update({
           where: { id: userId },

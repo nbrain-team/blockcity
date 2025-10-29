@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { TokenType } from '@/lib/generated/prisma';
 
 // GET: Get protocol settings
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     let settings = await prisma.protocolSettings.findFirst();
 
@@ -86,7 +86,7 @@ export async function PATCH(request: NextRequest) {
         },
       });
     } else {
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
 
       if (protocolYieldPercent !== undefined) updateData.protocolYieldPercent = protocolYieldPercent;
       if (userYieldPercent !== undefined) updateData.userYieldPercent = userYieldPercent;

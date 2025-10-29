@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 
 interface AdminAnalytics {
   tvl: {
@@ -28,8 +27,21 @@ interface AdminAnalytics {
     totalDistributed: number;
   };
   leaderboards: {
-    topUsersByPoints: any[];
-    topBrandsByTVL: any[];
+    topUsersByPoints: Array<{
+      id: string;
+      displayName: string;
+      totalPoints: number;
+      totalLikes: number;
+      currentLevel: string;
+    }>;
+    topBrandsByTVL: Array<{
+      id: string;
+      name: string;
+      displayName: string;
+      tvl: number;
+      totalFollowers: number;
+      totalLikes: number;
+    }>;
   };
 }
 
@@ -40,6 +52,7 @@ export default function AdminAnalyticsPage() {
 
   useEffect(() => {
     loadAnalytics();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [period]);
 
   const loadAnalytics = async () => {
@@ -195,7 +208,7 @@ export default function AdminAnalyticsPage() {
           </div>
           
           <div className="space-y-3">
-            {data.leaderboards.topUsersByPoints.map((user: any, index: number) => (
+            {data.leaderboards.topUsersByPoints.map((user, index: number) => (
               <div key={user.id} className="flex items-center gap-3 p-3 border rounded-lg">
                 <div className="w-8 h-8 flex items-center justify-center rounded-full bg-burgundy text-white font-bold">
                   {index + 1}
@@ -223,7 +236,7 @@ export default function AdminAnalyticsPage() {
           </div>
           
           <div className="space-y-3">
-            {data.leaderboards.topBrandsByTVL.map((brand: any, index: number) => (
+            {data.leaderboards.topBrandsByTVL.map((brand, index: number) => (
               <div key={brand.id} className="flex items-center gap-3 p-3 border rounded-lg">
                 <div className="w-8 h-8 flex items-center justify-center rounded-full bg-green-600 text-white font-bold">
                   {index + 1}

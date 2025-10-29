@@ -28,6 +28,7 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     loadLeaderboard();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, sortBy]);
 
   const loadLeaderboard = async () => {
