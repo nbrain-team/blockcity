@@ -18,7 +18,7 @@ interface CompanyData {
 
 function CompanyLandingContent({ company }: { company: CompanyData }) {
   const router = useRouter();
-  const { user, primaryWallet } = useDynamicContext();
+  const { user, primaryWallet, setShowAuthFlow } = useDynamicContext();
 
   useEffect(() => {
     if (user && primaryWallet) {
@@ -59,10 +59,9 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
   };
 
   const handleConnectWallet = () => {
-    // The DynamicWidget will handle the connection
-    const widget = document.querySelector('[data-dynamic-widget-button]');
-    if (widget instanceof HTMLElement) {
-      widget.click();
+    // Trigger Dynamic.xyz auth flow
+    if (setShowAuthFlow) {
+      setShowAuthFlow(true);
     }
   };
 
@@ -74,11 +73,10 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
               {company.logoUrl && (
-                <Image 
+                // eslint-disable-next-line @next/next/no-img-element
+                <img 
                   src={company.logoUrl} 
                   alt={`${company.name} Logo`}
-                  width={150} 
-                  height={40}
                   className="h-10 w-auto"
                 />
               )}
