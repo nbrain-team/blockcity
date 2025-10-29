@@ -12,12 +12,22 @@ export const COMPANY_CREDENTIALS = {
   role: 'company',
 };
 
+export const ROGUE_VANS_CREDENTIALS = {
+  username: 'roguevans',
+  password: '123456',
+  role: 'company',
+};
+
 export function validateCredentials(username: string, password: string) {
   if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
     return { valid: true, role: 'admin', username };
   }
   
   if (username === COMPANY_CREDENTIALS.username && password === COMPANY_CREDENTIALS.password) {
+    return { valid: true, role: 'company', username };
+  }
+  
+  if (username === ROGUE_VANS_CREDENTIALS.username && password === ROGUE_VANS_CREDENTIALS.password) {
     return { valid: true, role: 'company', username };
   }
   
