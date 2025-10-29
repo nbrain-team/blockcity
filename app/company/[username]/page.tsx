@@ -5,8 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { DynamicContextProvider, DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
+import { DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 interface CompanyData {
   id: string;
@@ -231,17 +230,6 @@ export default function CompanyLandingPage() {
     );
   }
 
-  const dynamicEnvironmentId = process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID || '';
-
-  return (
-    <DynamicContextProvider
-      settings={{
-        environmentId: dynamicEnvironmentId,
-        walletConnectors: [EthereumWalletConnectors],
-      }}
-    >
-      <CompanyLandingContent company={company} />
-    </DynamicContextProvider>
-  );
+  return <CompanyLandingContent company={company} />;
 }
 
