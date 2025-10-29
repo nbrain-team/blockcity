@@ -58,48 +58,36 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
     }
   };
 
+  const handleConnectWallet = () => {
+    // The DynamicWidget will handle the connection
+    const widget = document.querySelector('[data-dynamic-widget-button]');
+    if (widget instanceof HTMLElement) {
+      widget.click();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header with company logo */}
       <header className="border-b border-[#1B0031] bg-[#0A0A0A]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
-              {company.logoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img 
+              {company.logoUrl && (
+                <Image 
                   src={company.logoUrl} 
                   alt={`${company.name} Logo`}
-                  className="h-10 w-auto"
-                />
-              ) : (
-                <Image 
-                  src="/block-logo.png" 
-                  alt="BlockCity Logo" 
                   width={150} 
                   height={40}
                   className="h-10 w-auto"
                 />
               )}
+              <h1 className="text-xl font-bold text-white">{company.programName}</h1>
             </div>
             <DynamicWidget />
           </div>
         </div>
       </header>
-
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-[#0A0A0A] via-[#1B0031] to-[#bc4a4b] text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl font-bold mb-6">
-              {company.programName}
-            </h1>
-            <p className="text-xl text-gray-200 mb-8">
-              Powered by {company.name}
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
@@ -146,7 +134,19 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
               </ol>
             </div>
 
-            {user && (
+            {!user ? (
+              <div className="mt-6">
+                <Button 
+                  onClick={handleConnectWallet}
+                  className="w-full bg-[#bc4a4b] hover:bg-[#a03d3e] text-white py-6 text-lg font-semibold"
+                >
+                  Join {company.name} Rewards Program
+                </Button>
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  Click to connect your wallet and start earning Bitcoin rewards
+                </p>
+              </div>
+            ) : (
               <div className="rounded-md bg-green-50 border border-green-200 p-4">
                 <p className="text-sm font-medium text-green-800">
                   Welcome! Your account is being set up. Redirecting to dashboard...

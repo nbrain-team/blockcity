@@ -10,10 +10,11 @@ import Header from './Header';
 export default function ConditionalHeader() {
   const pathname = usePathname();
   
-  // Don't show header on admin or company dashboard pages
+  // Don't show header on admin, company dashboard, or company landing pages
   const hideHeader = 
     pathname?.startsWith('/admin/dashboard') || 
-    pathname?.startsWith('/company/dashboard');
+    pathname?.startsWith('/company/dashboard') ||
+    pathname?.startsWith('/company/') && !pathname?.includes('/company/login');
   
   if (hideHeader) {
     return null;
