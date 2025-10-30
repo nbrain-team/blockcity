@@ -15,7 +15,7 @@ export default function HomePage() {
             {/* Main Heading */}
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
               Earn Bitcoin Rewards,{' '}
-              <span className="text-[#bc4a4b]">Simplify Your Life</span>
+              <span className="text-orange-500">Simplify Your Life</span>
             </h1>
             
             {/* Subtitle */}
@@ -26,7 +26,7 @@ export default function HomePage() {
             
             {/* CTA Buttons */}
             <div className="flex gap-4 justify-center mb-16">
-              <Button size="lg" className="bg-[#bc4a4b] hover:bg-[#9a3a3b] text-white font-semibold px-8 py-6 text-lg rounded-lg">
+              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-6 text-lg rounded-lg">
                 Get Started
               </Button>
               <Button size="lg" variant="outline" className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold px-8 py-6 text-lg rounded-lg">
@@ -48,8 +48,8 @@ export default function HomePage() {
               </div>
               
               {/* Decorative blur elements */}
-              <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#bc4a4b] opacity-10 rounded-full blur-3xl"></div>
-              <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-500 opacity-10 rounded-full blur-3xl"></div>
+              <div className="absolute -top-20 -left-20 w-64 h-64 bg-orange-500 opacity-10 rounded-full blur-3xl"></div>
+              <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-orange-400 opacity-10 rounded-full blur-3xl"></div>
             </div>
           </div>
         </div>
