@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { getAuthSession, clearAuthSession } from '@/lib/auth';
+import { getAuthSession, clearAuthSession, isBrandRole } from '@/lib/auth';
 import Image from 'next/image';
 
 export default function ProgramSettings() {
@@ -27,23 +28,26 @@ export default function ProgramSettings() {
 
   useEffect(() => {
     const session = getAuthSession();
-    if (!session || session.role !== 'company') {
-      router.push('/company/login');
+    if (!session || !isBrandRole(session.role)) {
+      router.push('/brand/login');
     } else {
       setIsAuthenticated(true);
-      // For demo: fetch the first/demo company from the database
-      loadCompanyAndSettings();
+      loadCompanyAndSettings(session.username);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  const loadCompanyAndSettings = async () => {
+  const loadCompanyAndSettings = async (username: string) => {
     try {
-      // Fetch companies to get the first company (demo mode)
-      const companiesResponse = await fetch('/api/companies');
-      if (companiesResponse.ok) {
-        const companies = await companiesResponse.json();
-        if (companies && companies.length > 0) {
-          const company = companies[0];
+      // Get company by username (roguevans, client, etc.)
+      const publicResponse = await fetch(`/api/companies/public?username=${username}`);
+      if (publicResponse.ok) {
+        const publicData = await publicResponse.json();
+        
+        // Get full company details
+        const fullResponse = await fetch(`/api/companies?companyId=${publicData.id}`);
+        if (fullResponse.ok) {
+          const company = await fullResponse.json();
           setCompanyId(company.id);
           setCompanyName(company.name || '');
           setUsername(company.username || '');
@@ -127,7 +131,7 @@ export default function ProgramSettings() {
             <div className="flex items-center gap-4">
               <Button 
                 variant="outline" 
-                onClick={() => router.push('/company/dashboard')}
+                onClick={() => router.push('/brand/dashboard')}
                 className="text-white border-gray-600 hover:bg-gray-800"
               >
                 Back to Dashboard
@@ -164,20 +168,20 @@ export default function ProgramSettings() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Company Information</CardTitle>
+              <CardTitle>Brand Information</CardTitle>
               <CardDescription>
-                Basic information about your company
+                Basic information about your brand
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Company Name
+                  Brand Name
                 </label>
                 <Input
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="ACME Corporation"
+                  placeholder="Rogue Vans"
                   required
                 />
               </div>
@@ -189,11 +193,11 @@ export default function ProgramSettings() {
                 <Input
                   value={username}
                   onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                  placeholder="acme-corp"
+                  placeholder="roguevans"
                   required
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Only lowercase letters, numbers, and dashes. This will be used in your landing page URL.
+                  Only lowercase letters, numbers, and dashes. Your public page will be at: blockcityfi.com/{username}
                 </p>
               </div>
 
@@ -204,11 +208,11 @@ export default function ProgramSettings() {
                 <Input
                   value={logoUrl}
                   onChange={(e) => setLogoUrl(e.target.value)}
-                  placeholder="https://example.com/logo.png"
+                  placeholder="https://roguevans.com/logo.png"
                   type="url"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Enter the URL of your company logo (optional)
+                  Enter the URL of your brand logo (displays on public page)
                 </p>
               </div>
             </CardContent>
@@ -216,9 +220,9 @@ export default function ProgramSettings() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Rewards Program Details</CardTitle>
+              <CardTitle>Public Page Content</CardTitle>
               <CardDescription>
-                Information about your rewards program
+                This content appears on your public-facing brand page
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -229,7 +233,7 @@ export default function ProgramSettings() {
                 <Input
                   value={programName}
                   onChange={(e) => setProgramName(e.target.value)}
-                  placeholder="ACME Rewards Program"
+                  placeholder="Rogue Rewards - Adventure That Pays You Back"
                   required
                 />
               </div>
@@ -241,12 +245,12 @@ export default function ProgramSettings() {
                 <Textarea
                   value={programDetails}
                   onChange={(e) => setProgramDetails(e.target.value)}
-                  placeholder="Describe your rewards program, benefits, and how customers can earn rewards..."
+                  placeholder="Earn Bitcoin rebates on your van purchase. Get 7% back in BTC, earn yield during production, and own both your van and Bitcoin when delivered!"
                   rows={6}
                   required
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  This will be displayed on your landing page
+                  Explain your rewards program - this is what customers see on your public page
                 </p>
               </div>
             </CardContent>
@@ -254,9 +258,9 @@ export default function ProgramSettings() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Landing Page URL</CardTitle>
+              <CardTitle>Public Brand Page URL</CardTitle>
               <CardDescription>
-                Share this link with your customers to sign up
+                Share this link with customers - they can sign up and connect wallets
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -266,9 +270,18 @@ export default function ProgramSettings() {
                 </p>
               </div>
               {username && (
-                <p className="text-sm text-gray-500 mt-2">
-                  Anyone who signs up through this link will be connected to your company
-                </p>
+                <>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Anyone who signs up through this link will be connected to your brand
+                  </p>
+                  <div className="mt-3">
+                    <Link href={`/company/${username}`} target="_blank">
+                      <Button variant="outline" size="sm">
+                        👁️ Preview Public Page
+                      </Button>
+                    </Link>
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>
@@ -277,7 +290,7 @@ export default function ProgramSettings() {
             <Button 
               type="button" 
               variant="outline" 
-              onClick={() => router.push('/company/dashboard')}
+              onClick={() => router.push('/brand/dashboard')}
             >
               Cancel
             </Button>

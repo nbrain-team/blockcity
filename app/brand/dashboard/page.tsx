@@ -9,6 +9,8 @@ import { getAuthSession, isBrandRole } from '@/lib/auth';
 import CreateProductModal from '@/components/brand/CreateProductModal';
 import CreatePostModal from '@/components/brand/CreatePostModal';
 import CreateCampaignModal from '@/components/brand/CreateCampaignModal';
+import AddClientModal from '@/components/brand/AddClientModal';
+import Link from 'next/link';
 
 // Force dynamic rendering - no static generation
 export const dynamic = 'force-dynamic';
@@ -72,6 +74,18 @@ export default function BrandDashboardPage() {
   const [showProductModal, setShowProductModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
   const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const [showAddClientModal, setShowAddClientModal] = useState(false);
+  
+  // Customers/clients data
+  const [customers, setCustomers] = useState<Array<{
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    walletAddress: string | null;
+    totalRewards: number;
+    createdAt: string;
+  }>>([]);
 
   useEffect(() => {
     // Check authentication immediately
@@ -105,9 +119,10 @@ export default function BrandDashboardPage() {
     setBrandId(fetchedBrandId);
     
     try {
-      const [analyticsRes, ordersRes] = await Promise.all([
+      const [analyticsRes, ordersRes, customersRes] = await Promise.all([
         fetch(`/api/analytics?type=brand&brandId=${fetchedBrandId}`),
         fetch(`/api/purchase-orders?brandId=${fetchedBrandId}`),
+        fetch(`/api/companies?companyId=${fetchedBrandId}`),
       ]);
       
       // Check if APIs returned errors (likely migration not run)
@@ -142,15 +157,21 @@ export default function BrandDashboardPage() {
         return;
       }
       
-      const [analytics, orders] = await Promise.all([
+      const [analytics, orders, companyData] = await Promise.all([
         analyticsRes.json(),
         ordersRes.json(),
+        customersRes.json(),
       ]);
       
       setData({
         ...analytics.analytics,
         recentOrders: orders.orders?.slice(0, 5) || [],
       });
+      
+      // Set customers data
+      if (companyData.users) {
+        setCustomers(companyData.users);
+      }
     } catch (err) {
       console.error('Error loading dashboard:', err);
       // Set fallback data
@@ -261,9 +282,23 @@ export default function BrandDashboardPage() {
       )}
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{data.brand?.displayName || data.brand?.name || 'Brand Dashboard'}</h1>
-        <p className="text-gray-600">Brand Dashboard & Analytics</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">{data.brand?.displayName || data.brand?.name || 'Brand Dashboard'}</h1>
+          <p className="text-gray-600">Brand Dashboard & Analytics</p>
+        </div>
+        <div className="flex gap-3">
+          <Link href="/company/dashboard/settings">
+            <Button variant="outline">
+              ⚙️ Page Settings
+            </Button>
+          </Link>
+          <Link href={`/company/${data.brand?.name?.toLowerCase() || 'brand'}`} target="_blank">
+            <Button variant="outline">
+              👁️ View Public Page
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Top Stats */}
@@ -380,11 +415,87 @@ export default function BrandDashboardPage() {
             )}
           </Card>
 
+          {/* Customers/Clients Section */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">Your Customers</h2>
+              <Button 
+                className="btn-primary" 
+                size="sm"
+                onClick={() => setShowAddClientModal(true)}
+              >
+                + Add Customer
+              </Button>
+            </div>
+            
+            {customers.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                <p className="mb-3">No customers yet</p>
+                <p className="text-sm mb-4">
+                  Customers can sign up via your public page or you can add them manually
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <Button 
+                    className="btn-primary"
+                    size="sm"
+                    onClick={() => setShowAddClientModal(true)}
+                  >
+                    Add Customer
+                  </Button>
+                  <Link href={`/company/${data.brand?.name?.toLowerCase() || 'brand'}`} target="_blank">
+                    <Button variant="outline" size="sm">
+                      View Public Signup Page
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {customers.slice(0, 10).map((customer) => (
+                  <div key={customer.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                    <div className="flex-1">
+                      <div className="font-medium">
+                        {customer.firstName && customer.lastName 
+                          ? `${customer.firstName} ${customer.lastName}`
+                          : customer.email}
+                      </div>
+                      <div className="text-sm text-gray-600">{customer.email}</div>
+                      {customer.walletAddress && (
+                        <div className="text-xs text-gray-500 font-mono">
+                          {customer.walletAddress.slice(0, 8)}...{customer.walletAddress.slice(-6)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium">
+                        {customer.totalRewards.toFixed(8)} BTC
+                      </div>
+                      <div className="text-xs text-gray-500">rewards</div>
+                    </div>
+                  </div>
+                ))}
+                {customers.length > 10 && (
+                  <div className="text-center pt-3">
+                    <Button variant="outline" size="sm">
+                      View All {customers.length} Customers
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </Card>
+
           {/* Active Campaigns */}
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold">Active Campaigns</h2>
-              <Button className="btn-primary" size="sm">+ New Campaign</Button>
+              <Button 
+                className="btn-primary" 
+                size="sm"
+                onClick={() => setShowCampaignModal(true)}
+              >
+                + New Campaign
+              </Button>
             </div>
             
             {data.activeCampaigns.length === 0 ? (
@@ -543,6 +654,15 @@ export default function BrandDashboardPage() {
       <CreateCampaignModal
         open={showCampaignModal}
         onClose={() => setShowCampaignModal(false)}
+        brandId={brandId}
+        onSuccess={() => {
+          loadBrandData(getAuthSession()?.username || '');
+        }}
+      />
+
+      <AddClientModal
+        open={showAddClientModal}
+        onClose={() => setShowAddClientModal(false)}
         brandId={brandId}
         onSuccess={() => {
           loadBrandData(getAuthSession()?.username || '');
