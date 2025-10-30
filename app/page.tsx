@@ -3,27 +3,54 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-burgundy to-red-700 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">
-            Earn Bitcoin Rewards<br />While You Engage
-          </h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            BlockCity is the revolutionary platform where customers earn BTC rewards for engaging with brands, 
-            and brands build loyal communities through yield-powered incentives.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Button size="lg" className="bg-white text-burgundy hover:bg-gray-100 font-semibold">
-              Get Started
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-              Learn More
-            </Button>
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 py-20 lg:py-32">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-5xl mx-auto">
+            {/* Main Heading */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              Earn Bitcoin Rewards,{' '}
+              <span className="text-[#bc4a4b]">Simplify Your Life</span>
+            </h1>
+            
+            {/* Subtitle */}
+            <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+              We're here to simplify the intricacies of your life, providing a user-friendly platform that not only manages 
+              your rewards effortlessly but also enhances your overall effeciency.
+            </p>
+            
+            {/* CTA Buttons */}
+            <div className="flex gap-4 justify-center mb-16">
+              <Button size="lg" className="bg-[#bc4a4b] hover:bg-[#9a3a3b] text-white font-semibold px-8 py-6 text-lg rounded-lg">
+                Get Started
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold px-8 py-6 text-lg rounded-lg">
+                Preview Platform
+              </Button>
+            </div>
+            
+            {/* Dashboard Screenshot */}
+            <div className="relative max-w-6xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-white">
+                <Image 
+                  src="/dashboard-preview.png" 
+                  alt="BlockCity Dashboard Preview"
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
+              
+              {/* Decorative blur elements */}
+              <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#bc4a4b] opacity-10 rounded-full blur-3xl"></div>
+              <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-500 opacity-10 rounded-full blur-3xl"></div>
+            </div>
           </div>
         </div>
       </section>
