@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getAuthSession, isBrandRole } from '@/lib/auth';
 
+// Force dynamic rendering - no static generation
+export const dynamic = 'force-dynamic';
+
 interface BrandDashboardData {
   brand: {
     id: string;
@@ -62,13 +65,18 @@ export default function BrandDashboardPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication immediately
     const session = getAuthSession();
+    
+    console.log('Auth check:', session);
+    
     if (!session || !isBrandRole(session.role)) {
+      console.log('Not authenticated or not brand role, redirecting to login');
       router.push('/brand/login');
       return;
     }
     
+    console.log('Authenticated as brand:', session.username);
     setIsAuthenticated(true);
     loadBrandData(session.username);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,10 +187,19 @@ export default function BrandDashboardPage() {
     }
   };
 
-  if (!isAuthenticated || loading) {
+  // Show loading while checking auth or fetching data
+  if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading dashboard...</div>
+        <div className="text-lg">Checking authentication...</div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Loading your brand dashboard...</div>
       </div>
     );
   }

@@ -5,6 +5,9 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 interface LeaderboardEntry {
   id: string;
   displayName: string;

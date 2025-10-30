@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 interface AdminAnalytics {
   tvl: {
     total: number;
