@@ -6,6 +6,9 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getAuthSession, isBrandRole } from '@/lib/auth';
+import CreateProductModal from '@/components/brand/CreateProductModal';
+import CreatePostModal from '@/components/brand/CreatePostModal';
+import CreateCampaignModal from '@/components/brand/CreateCampaignModal';
 
 // Force dynamic rendering - no static generation
 export const dynamic = 'force-dynamic';
@@ -63,6 +66,12 @@ export default function BrandDashboardPage() {
   const [data, setData] = useState<BrandDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [brandId, setBrandId] = useState<string>('');
+  
+  // Modal states
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [showCampaignModal, setShowCampaignModal] = useState(false);
 
   useEffect(() => {
     // Check authentication immediately
@@ -86,17 +95,19 @@ export default function BrandDashboardPage() {
     setLoading(true);
     
     // First, get brand/company by username
-    const brandId = await getBrandIdByUsername(username);
+    const fetchedBrandId = await getBrandIdByUsername(username);
     
-    if (!brandId) {
+    if (!fetchedBrandId) {
       setLoading(false);
       return;
     }
     
+    setBrandId(fetchedBrandId);
+    
     try {
       const [analyticsRes, ordersRes] = await Promise.all([
-        fetch(`/api/analytics?type=brand&brandId=${brandId}`),
-        fetch(`/api/purchase-orders?brandId=${brandId}`),
+        fetch(`/api/analytics?type=brand&brandId=${fetchedBrandId}`),
+        fetch(`/api/purchase-orders?brandId=${fetchedBrandId}`),
       ]);
       
       // Check if APIs returned errors (likely migration not run)
@@ -105,7 +116,7 @@ export default function BrandDashboardPage() {
         // Use fallback data structure
         setData({
           brand: {
-            id: brandId,
+            id: fetchedBrandId,
             name: username,
             displayName: username.charAt(0).toUpperCase() + username.slice(1),
             tvl: 0,
@@ -145,7 +156,7 @@ export default function BrandDashboardPage() {
       // Set fallback data
       setData({
         brand: {
-          id: brandId,
+          id: fetchedBrandId,
           name: username,
           displayName: username.charAt(0).toUpperCase() + username.slice(1),
           tvl: 0,
@@ -294,19 +305,19 @@ export default function BrandDashboardPage() {
             <div className="grid grid-cols-2 gap-3">
               <Button 
                 className="btn-primary"
-                onClick={() => alert('Post creation coming soon! This will open a modal to create gamified posts with BTC rewards.')}
+                onClick={() => setShowPostModal(true)}
               >
                 Create Post
               </Button>
               <Button 
                 variant="outline"
-                onClick={() => alert('Product creation coming soon! This will let you add products with 1-10% BTC rebates.')}
+                onClick={() => setShowProductModal(true)}
               >
                 New Product
               </Button>
               <Button 
                 variant="outline"
-                onClick={() => alert('Campaign creation coming soon! This will let you create reward campaigns for customers.')}
+                onClick={() => setShowCampaignModal(true)}
               >
                 New Campaign
               </Button>
@@ -383,7 +394,7 @@ export default function BrandDashboardPage() {
                 <Button 
                   className="btn-primary"
                   size="sm"
-                  onClick={() => alert('Campaign creation UI coming soon! You\'ll be able to set reward pools and track analytics.')}
+                  onClick={() => setShowCampaignModal(true)}
                 >
                   Create Your First Campaign
                 </Button>
@@ -477,7 +488,7 @@ export default function BrandDashboardPage() {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => alert('Product creation coming soon! Add products like the $300K Rogue Van with 7% BTC rebates.')}
+                  onClick={() => setShowProductModal(true)}
                 >
                   Add Product
                 </Button>
@@ -509,6 +520,34 @@ export default function BrandDashboardPage() {
           </Card>
         </div>
       </div>
+
+      {/* Modals */}
+      <CreateProductModal
+        open={showProductModal}
+        onClose={() => setShowProductModal(false)}
+        brandId={brandId}
+        onSuccess={() => {
+          loadBrandData(getAuthSession()?.username || '');
+        }}
+      />
+
+      <CreatePostModal
+        open={showPostModal}
+        onClose={() => setShowPostModal(false)}
+        brandId={brandId}
+        onSuccess={() => {
+          loadBrandData(getAuthSession()?.username || '');
+        }}
+      />
+
+      <CreateCampaignModal
+        open={showCampaignModal}
+        onClose={() => setShowCampaignModal(false)}
+        brandId={brandId}
+        onSuccess={() => {
+          loadBrandData(getAuthSession()?.username || '');
+        }}
+      />
     </div>
   );
 }
