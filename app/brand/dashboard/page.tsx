@@ -228,25 +228,22 @@ export default function BrandDashboardPage() {
     );
   }
 
-  const showMigrationWarning = data.metrics.totalPostsCreated === 0 && 
-                                data.metrics.totalOrdersReceived === 0 &&
-                                data.recentOrders.length === 0;
+  const isNewBrand = data.metrics.totalPostsCreated === 0 && 
+                     data.metrics.totalOrdersReceived === 0 &&
+                     data.recentOrders.length === 0;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
-      {/* Migration Warning Banner */}
-      {showMigrationWarning && (
-        <Card className="mb-6 p-4 bg-yellow-50 border-yellow-200">
+      {/* Welcome Banner for New Brands */}
+      {isNewBrand && (
+        <Card className="mb-6 p-4 bg-blue-50 border-blue-200">
           <div className="flex items-start gap-3">
-            <div className="text-2xl">⚠️</div>
+            <div className="text-2xl">🎉</div>
             <div className="flex-1">
-              <h3 className="font-semibold text-yellow-900 mb-1">Migration May Be Pending</h3>
-              <p className="text-sm text-yellow-800 mb-2">
-                If you just deployed, run this command in Render Shell:
+              <h3 className="font-semibold text-blue-900 mb-1">Welcome to Your Brand Dashboard!</h3>
+              <p className="text-sm text-blue-800">
+                Your account is set up and ready. Start by creating products, campaigns, or posts to engage with customers!
               </p>
-              <code className="text-xs bg-yellow-100 px-2 py-1 rounded">
-                cd bcity && npx prisma migrate deploy
-              </code>
             </div>
           </div>
         </Card>
@@ -295,10 +292,30 @@ export default function BrandDashboardPage() {
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-3">
-              <Button className="btn-primary">Create Post</Button>
-              <Button variant="outline">New Product</Button>
-              <Button variant="outline">New Campaign</Button>
-              <Button variant="outline">View Analytics</Button>
+              <Button 
+                className="btn-primary"
+                onClick={() => alert('Post creation coming soon! This will open a modal to create gamified posts with BTC rewards.')}
+              >
+                Create Post
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => alert('Product creation coming soon! This will let you add products with 1-10% BTC rebates.')}
+              >
+                New Product
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => alert('Campaign creation coming soon! This will let you create reward campaigns for customers.')}
+              >
+                New Campaign
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => router.push('/admin/analytics')}
+              >
+                View Analytics
+              </Button>
             </div>
           </Card>
 
@@ -311,7 +328,10 @@ export default function BrandDashboardPage() {
             
             {data.recentOrders.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
-                <p>No orders yet</p>
+                <p className="mb-3">No orders yet</p>
+                <p className="text-sm">
+                  Orders will appear here when customers purchase your products with BTC rebates
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -335,7 +355,12 @@ export default function BrandDashboardPage() {
                         <span className="text-gray-600">Issued:</span> {order.btcRebateIssued ? '✅' : '❌'}
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="w-full mt-3">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full mt-3"
+                      onClick={() => alert(`Order details for ${order.orderNumber} - Full management UI coming soon!`)}
+                    >
                       Manage Order
                     </Button>
                   </div>
@@ -353,8 +378,15 @@ export default function BrandDashboardPage() {
             
             {data.activeCampaigns.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
-                <p className="mb-4">No active campaigns</p>
-                <p className="text-sm">Create a campaign to reward customer engagement</p>
+                <p className="mb-3">No active campaigns</p>
+                <p className="text-sm mb-4">Create a campaign to reward customer engagement with BTC</p>
+                <Button 
+                  className="btn-primary"
+                  size="sm"
+                  onClick={() => alert('Campaign creation UI coming soon! You\'ll be able to set reward pools and track analytics.')}
+                >
+                  Create Your First Campaign
+                </Button>
               </div>
             ) : (
               <div className="space-y-4">
@@ -441,7 +473,14 @@ export default function BrandDashboardPage() {
             
             {data.topProducts.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <p className="text-sm">No products yet</p>
+                <p className="text-sm mb-3">No products yet</p>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => alert('Product creation coming soon! Add products like the $300K Rogue Van with 7% BTC rebates.')}
+                >
+                  Add Product
+                </Button>
               </div>
             ) : (
               <div className="space-y-3">
