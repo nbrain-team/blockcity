@@ -293,11 +293,13 @@ export default function BrandDashboardPage() {
               ⚙️ Page Settings
             </Button>
           </Link>
-          <Link href={`/company/${data.brand?.name?.toLowerCase() || 'brand'}`} target="_blank">
-            <Button variant="outline">
-              👁️ View Public Page
-            </Button>
-          </Link>
+          {data.brand?.id && (
+            <Link href={`/company/${getAuthSession()?.username || 'roguevans'}`} target="_blank">
+              <Button variant="outline">
+                👁️ View Public Page
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -442,7 +444,7 @@ export default function BrandDashboardPage() {
                   >
                     Add Customer
                   </Button>
-                  <Link href={`/company/${data.brand?.name?.toLowerCase() || 'brand'}`} target="_blank">
+                  <Link href={`/company/${getAuthSession()?.username || 'roguevans'}`} target="_blank">
                     <Button variant="outline" size="sm">
                       View Public Signup Page
                     </Button>
