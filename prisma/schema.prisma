@@ -113,7 +113,7 @@ model Company {
   displayName     String?
   bio             String?  @db.Text
   bannerUrl       String?
-  logoUrl         String?
+  logoUrl         String?  @db.Text // Can store base64 encoded images
   
   // TVL & Metrics
   tvl             Float    @default(0) // Total Value Locked

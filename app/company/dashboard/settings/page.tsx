@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { getAuthSession, clearAuthSession, isBrandRole } from '@/lib/auth';
 import Image from 'next/image';
 
@@ -202,18 +203,13 @@ export default function ProgramSettings() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Logo URL
-                </label>
-                <Input
+                <ImageUpload
                   value={logoUrl}
-                  onChange={(e) => setLogoUrl(e.target.value)}
-                  placeholder="https://roguevans.com/logo.png"
-                  type="url"
+                  onChange={setLogoUrl}
+                  maxSize={500}
+                  label="Brand Logo"
+                  description="Upload your brand logo (500x500 pixels or less)"
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  Enter the URL of your brand logo (displays on public page)
-                </p>
               </div>
             </CardContent>
           </Card>
