@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +15,7 @@ import { DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 export default function ProgramSettings() {
   const router = useRouter();
-  const { user, primaryWallet } = useDynamicContext();
+  const { primaryWallet } = useDynamicContext();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -33,6 +33,31 @@ export default function ProgramSettings() {
   const [fontFamily, setFontFamily] = useState('Inter');
   const [walletAddress, setWalletAddress] = useState('');
 
+  // Define updateWalletAddress before useEffects
+  const updateWalletAddress = useCallback(async (address: string) => {
+    if (!companyId) return;
+    
+    try {
+      const response = await fetch('/api/companies/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyId,
+          walletAddress: address,
+        }),
+      });
+
+      if (response.ok) {
+        setWalletAddress(address);
+        console.log('Wallet address updated successfully');
+      }
+    } catch (error) {
+      console.error('Error updating wallet address:', error);
+    }
+  }, [companyId]);
+
   useEffect(() => {
     const session = getAuthSession();
     if (!session || !isBrandRole(session.role)) {
@@ -41,7 +66,7 @@ export default function ProgramSettings() {
       setIsAuthenticated(true);
       loadCompanyAndSettings(session.username);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   // Update wallet address when Dynamic wallet connects
@@ -49,8 +74,7 @@ export default function ProgramSettings() {
     if (primaryWallet?.address && companyId) {
       updateWalletAddress(primaryWallet.address);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primaryWallet?.address, companyId]);
+  }, [primaryWallet?.address, companyId, updateWalletAddress]);
 
   const loadCompanyAndSettings = async (username: string) => {
     try {
@@ -79,28 +103,6 @@ export default function ProgramSettings() {
       console.error('Error loading company settings:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const updateWalletAddress = async (address: string) => {
-    try {
-      const response = await fetch('/api/companies/settings', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          companyId,
-          walletAddress: address,
-        }),
-      });
-
-      if (response.ok) {
-        setWalletAddress(address);
-        console.log('Wallet address updated successfully');
-      }
-    } catch (error) {
-      console.error('Error updating wallet address:', error);
     }
   };
 
@@ -408,7 +410,7 @@ export default function ProgramSettings() {
             <CardContent className="space-y-4">
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
                 <p className="text-sm text-blue-900 mb-3">
-                  Connect your wallet to enable Single Sign-On (SSO) and manage your brand's treasury wallet directly.
+                  Connect your wallet to enable Single Sign-On (SSO) and manage your brand&apos;s treasury wallet directly.
                 </p>
                 <DynamicWidget />
               </div>

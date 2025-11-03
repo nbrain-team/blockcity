@@ -192,8 +192,8 @@ export default function CreateCampaignModal({ open, onClose, brandId, onSuccess 
   }
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+    <Dialog open={open} onOpenChange={onClose} className="max-w-3xl">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Campaign</DialogTitle>
           <DialogDescription>

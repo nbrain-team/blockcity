@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getAuthSession, isBrandRole } from '@/lib/auth';
+import { getAuthSession, clearAuthSession, isBrandRole } from '@/lib/auth';
 import CreateProductModal from '@/components/brand/CreateProductModal';
 import CreatePostModal from '@/components/brand/CreatePostModal';
 import CreateCampaignModal from '@/components/brand/CreateCampaignModal';

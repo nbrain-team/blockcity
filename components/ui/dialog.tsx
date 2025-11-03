@@ -3,11 +3,13 @@ import * as React from "react"
 export function Dialog({ 
   open, 
   onOpenChange, 
-  children 
+  children,
+  className = "max-w-2xl"
 }: { 
   open: boolean; 
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
+  className?: string;
 }) {
   if (!open) return null;
 
@@ -17,7 +19,7 @@ export function Dialog({
         className="fixed inset-0 bg-black/50" 
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className={`relative bg-white rounded-lg shadow-lg ${className} w-full mx-4 max-h-[90vh] overflow-y-auto`}>
         {children}
       </div>
     </div>

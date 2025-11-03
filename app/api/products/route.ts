@@ -26,7 +26,14 @@ export async function GET(request: NextRequest) {
             },
           },
           campaigns: {
-            where: { isActive: true },
+            where: {
+              campaign: {
+                isActive: true,
+              },
+            },
+            include: {
+              campaign: true,
+            },
           },
         },
       });
