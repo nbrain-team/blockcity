@@ -1,13 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="py-16 lg:py-24">
+      <section className="py-16 lg:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-5xl mx-auto">
             {/* Main Heading */}
@@ -44,7 +43,7 @@ export default function HomePage() {
       </section>
 
       {/* Trusted By Section */}
-      <section className="py-12 border-t border-b border-gray-200 bg-gray-50">
+      <section className="py-16 border-t border-b border-gray-200 bg-gray-50">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wider mb-8">
             Trusted by Innovative Companies
@@ -61,7 +60,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4 text-center max-w-4xl">
           <p className="text-sm font-semibold text-orange-500 uppercase tracking-wider mb-4">
             Features
