@@ -26,6 +26,9 @@ export default function ProgramSettings() {
   const [programDetails, setProgramDetails] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [companyId, setCompanyId] = useState('');
+  const [primaryColor, setPrimaryColor] = useState('#bc4a4b');
+  const [secondaryColor, setSecondaryColor] = useState('#0A0A0A');
+  const [fontFamily, setFontFamily] = useState('Inter');
 
   useEffect(() => {
     const session = getAuthSession();
@@ -55,6 +58,9 @@ export default function ProgramSettings() {
           setProgramName(company.programName || '');
           setProgramDetails(company.programDetails || '');
           setLogoUrl(company.logoUrl || '');
+          setPrimaryColor(company.primaryColor || '#bc4a4b');
+          setSecondaryColor(company.secondaryColor || '#0A0A0A');
+          setFontFamily(company.fontFamily || 'Inter');
         }
       }
     } catch (error) {
@@ -87,6 +93,9 @@ export default function ProgramSettings() {
           programName,
           programDetails,
           logoUrl,
+          primaryColor,
+          secondaryColor,
+          fontFamily,
         }),
       });
 
@@ -210,6 +219,109 @@ export default function ProgramSettings() {
                   label="Brand Logo"
                   description="Upload your brand logo (500x500 pixels or less)"
                 />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Brand Customization</CardTitle>
+              <CardDescription>
+                Customize your public brand page colors and fonts to match your brand identity
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Primary Color
+                  </label>
+                  <div className="flex gap-3 items-center">
+                    <Input
+                      type="color"
+                      value={primaryColor}
+                      onChange={(e) => setPrimaryColor(e.target.value)}
+                      className="w-20 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={primaryColor}
+                      onChange={(e) => setPrimaryColor(e.target.value)}
+                      placeholder="#bc4a4b"
+                      pattern="^#[0-9A-Fa-f]{6}$"
+                      className="flex-1"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Main brand color (buttons, accents)
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Secondary Color
+                  </label>
+                  <div className="flex gap-3 items-center">
+                    <Input
+                      type="color"
+                      value={secondaryColor}
+                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      className="w-20 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={secondaryColor}
+                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      placeholder="#0A0A0A"
+                      pattern="^#[0-9A-Fa-f]{6}$"
+                      className="flex-1"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Header and footer background
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Font Family
+                </label>
+                <select
+                  value={fontFamily}
+                  onChange={(e) => setFontFamily(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                >
+                  <option value="Inter">Inter (Modern Sans-Serif)</option>
+                  <option value="Roboto">Roboto (Clean Sans-Serif)</option>
+                  <option value="Open Sans">Open Sans (Friendly)</option>
+                  <option value="Lato">Lato (Professional)</option>
+                  <option value="Montserrat">Montserrat (Geometric)</option>
+                  <option value="Poppins">Poppins (Rounded)</option>
+                  <option value="Playfair Display">Playfair Display (Elegant Serif)</option>
+                  <option value="Merriweather">Merriweather (Readable Serif)</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Font used across your public brand page
+                </p>
+              </div>
+
+              {/* Preview Section */}
+              <div className="mt-6 p-4 border rounded-lg" style={{ 
+                backgroundColor: secondaryColor,
+                color: '#ffffff',
+                fontFamily: fontFamily
+              }}>
+                <div className="text-sm font-medium mb-2">Preview</div>
+                <button
+                  className="px-4 py-2 rounded-md text-white font-semibold"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  Sample Button
+                </button>
+                <p className="mt-3 text-sm opacity-90">
+                  This is how your brand colors and font will look on your public page
+                </p>
               </div>
             </CardContent>
           </Card>

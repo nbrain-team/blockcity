@@ -22,6 +22,9 @@ export async function GET(request: NextRequest) {
         programName: true,
         programDetails: true,
         logoUrl: true,
+        primaryColor: true,
+        secondaryColor: true,
+        fontFamily: true,
       },
     });
 

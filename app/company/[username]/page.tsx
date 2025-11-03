@@ -14,6 +14,9 @@ interface CompanyData {
   programName: string;
   programDetails: string;
   logoUrl?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  fontFamily?: string;
 }
 
 function CompanyLandingContent({ company }: { company: CompanyData }) {
@@ -65,10 +68,14 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
     }
   };
 
+  const primaryColor = company.primaryColor || '#bc4a4b';
+  const secondaryColor = company.secondaryColor || '#0A0A0A';
+  const fontFamily = company.fontFamily || 'Inter';
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{ fontFamily }}>
       {/* Header with company logo */}
-      <header className="border-b border-[#1B0031] bg-[#0A0A0A]">
+      <header className="border-b" style={{ borderColor: primaryColor + '33', backgroundColor: secondaryColor }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
@@ -112,19 +119,28 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
               <h3 className="font-semibold text-lg mb-4">How It Works</h3>
               <ol className="space-y-3 text-gray-700">
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-[#bc4a4b] text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  <span 
+                    className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold"
+                    style={{ backgroundColor: primaryColor }}
+                  >
                     1
                   </span>
                   <span>Click &quot;Connect Wallet&quot; above to link your crypto wallet</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-[#bc4a4b] text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  <span 
+                    className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold"
+                    style={{ backgroundColor: primaryColor }}
+                  >
                     2
                   </span>
                   <span>Complete the sign-up process to join {company.name}&apos;s rewards program</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-[#bc4a4b] text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  <span 
+                    className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold"
+                    style={{ backgroundColor: primaryColor }}
+                  >
                     3
                   </span>
                   <span>Start earning Bitcoin rewards on your purchases</span>
@@ -136,7 +152,8 @@ function CompanyLandingContent({ company }: { company: CompanyData }) {
               <div className="mt-6">
                 <Button 
                   onClick={handleConnectWallet}
-                  className="w-full bg-[#bc4a4b] hover:bg-[#a03d3e] text-white py-6 text-lg font-semibold"
+                  className="w-full text-white py-6 text-lg font-semibold transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: primaryColor }}
                 >
                   Join {company.name} Rewards Program
                 </Button>

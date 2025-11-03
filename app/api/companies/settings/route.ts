@@ -22,6 +22,9 @@ export async function GET(request: NextRequest) {
         programName: true,
         programDetails: true,
         logoUrl: true,
+        primaryColor: true,
+        secondaryColor: true,
+        fontFamily: true,
       },
     });
 
@@ -45,7 +48,7 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { companyId, name, username, programName, programDetails, logoUrl } = body;
+    const { companyId, name, username, programName, programDetails, logoUrl, primaryColor, secondaryColor, fontFamily } = body;
 
     if (!companyId) {
       return NextResponse.json(
@@ -87,6 +90,9 @@ export async function PUT(request: NextRequest) {
         programName,
         programDetails,
         logoUrl,
+        primaryColor,
+        secondaryColor,
+        fontFamily,
       },
       select: {
         id: true,
@@ -95,6 +101,9 @@ export async function PUT(request: NextRequest) {
         programName: true,
         programDetails: true,
         logoUrl: true,
+        primaryColor: true,
+        secondaryColor: true,
+        fontFamily: true,
       },
     });
 

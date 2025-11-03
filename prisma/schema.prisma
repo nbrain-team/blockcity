@@ -129,6 +129,11 @@ model Company {
   programName     String?
   programDetails  String?  @db.Text
   
+  // Brand Customization
+  primaryColor    String?  @default("#bc4a4b") // Hex color code
+  secondaryColor  String?  @default("#0A0A0A") // Hex color code
+  fontFamily      String?  @default("Inter") // Font family name
+  
   // Level Thresholds (custom per brand)
   level1Threshold Float    @default(100)
   level2Threshold Float    @default(1000)
