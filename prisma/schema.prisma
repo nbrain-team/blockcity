@@ -486,21 +486,32 @@ model Product {
   updatedAt       DateTime  @updatedAt
 
   brand           Company   @relation(fields: [brandId], references: [id])
-  campaigns       Campaign[]
+  campaigns       CampaignProduct[]
   purchaseOrders  PurchaseOrder[]
   
   @@index([brandId])
   @@index([sku])
 }
 
+enum RewardCalculationType {
+  PERCENTAGE_OF_PURCHASE  // % of product price as BTC/USDC
+  FIXED_AMOUNT_FIAT      // Fixed USD amount converted to BTC
+}
+
 model Campaign {
   id              String    @id @default(cuid())
   brandId         String
-  productId       String?
   name            String
   description     String?   @db.Text
   rewardType      TokenType @default(BTC)
-  totalRewardPool Float     // Total BTC/USDC allocated
+  
+  // Reward Calculation
+  rewardCalculationType RewardCalculationType @default(PERCENTAGE_OF_PURCHASE)
+  rewardPercentage      Float?  // For PERCENTAGE_OF_PURCHASE (e.g., 7 = 7%)
+  rewardFixedAmountUSD  Float?  // For FIXED_AMOUNT_FIAT (e.g., 50 = $50)
+  
+  // Budget & Pool
+  totalRewardPool Float     // Total budget in BTC/USDC from treasury
   remainingPool   Float     // Remaining rewards
   
   // Campaign settings
@@ -518,11 +529,25 @@ model Campaign {
   updatedAt       DateTime  @updatedAt
 
   brand           Company   @relation(fields: [brandId], references: [id])
-  product         Product?  @relation(fields: [productId], references: [id])
+  products        CampaignProduct[]
   
   @@index([brandId])
-  @@index([productId])
   @@index([isActive])
+}
+
+// Junction table for Campaign <-> Product many-to-many relationship
+model CampaignProduct {
+  id         String   @id @default(cuid())
+  campaignId String
+  productId  String
+  createdAt  DateTime @default(now())
+
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@unique([campaignId, productId])
+  @@index([campaignId])
+  @@index([productId])
 }
 
 model PurchaseOrder {

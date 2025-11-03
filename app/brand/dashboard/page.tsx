@@ -349,6 +349,7 @@ export default function BrandDashboardPage() {
               <Button 
                 variant="outline"
                 onClick={() => setShowProductModal(true)}
+                data-product-modal
               >
                 New Product
               </Button>

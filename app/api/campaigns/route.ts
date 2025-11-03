@@ -26,7 +26,11 @@ export async function GET(request: NextRequest) {
               username: true,
             },
           },
-          product: true,
+          products: {
+            include: {
+              product: true,
+            },
+          },
         },
       });
 
@@ -43,8 +47,14 @@ export async function GET(request: NextRequest) {
     const campaigns = await prisma.campaign.findMany({
       where: {
         ...(brandId ? { brandId } : {}),
-        ...(productId ? { productId } : {}),
         ...(isActive !== null ? { isActive: isActive === 'true' } : {}),
+        ...(productId ? {
+          products: {
+            some: {
+              productId,
+            },
+          },
+        } : {}),
       },
       include: {
         brand: {
@@ -55,11 +65,16 @@ export async function GET(request: NextRequest) {
             logoUrl: true,
           },
         },
-        product: {
-          select: {
-            id: true,
-            name: true,
-            imageUrl: true,
+        products: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                imageUrl: true,
+              },
+            },
           },
         },
       },
@@ -83,10 +98,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       brandId,
-      productId,
+      productIds,
       name,
       description,
       rewardType = TokenType.BTC,
+      rewardCalculationType,
+      rewardPercentage,
+      rewardFixedAmountUSD,
       totalRewardPool,
       startDate,
       endDate,
@@ -99,9 +117,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!productIds || productIds.length === 0) {
+      return NextResponse.json(
+        { error: 'At least one product must be selected' },
+        { status: 400 }
+      );
+    }
+
     if (totalRewardPool <= 0) {
       return NextResponse.json(
         { error: 'totalRewardPool must be greater than 0' },
+        { status: 400 }
+      );
+    }
+
+    // Validate reward calculation fields
+    if (rewardCalculationType === 'PERCENTAGE_OF_PURCHASE' && !rewardPercentage) {
+      return NextResponse.json(
+        { error: 'rewardPercentage required for percentage-based rewards' },
+        { status: 400 }
+      );
+    }
+
+    if (rewardCalculationType === 'FIXED_AMOUNT_FIAT' && !rewardFixedAmountUSD) {
+      return NextResponse.json(
+        { error: 'rewardFixedAmountUSD required for fixed amount rewards' },
         { status: 400 }
       );
     }
@@ -123,17 +163,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Create campaign with product associations
     const campaign = await prisma.campaign.create({
       data: {
         brandId,
-        productId,
         name,
         description,
         rewardType,
+        rewardCalculationType,
+        rewardPercentage,
+        rewardFixedAmountUSD,
         totalRewardPool,
         remainingPool: totalRewardPool,
         startDate,
         endDate,
+        products: {
+          create: productIds.map((productId: string) => ({
+            productId,
+          })),
+        },
+      },
+      include: {
+        products: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
