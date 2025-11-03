@@ -11,9 +11,11 @@ import { Badge } from '@/components/ui/badge';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { getAuthSession, clearAuthSession, isBrandRole } from '@/lib/auth';
 import Image from 'next/image';
+import { DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 export default function ProgramSettings() {
   const router = useRouter();
+  const { user, primaryWallet } = useDynamicContext();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -29,6 +31,7 @@ export default function ProgramSettings() {
   const [primaryColor, setPrimaryColor] = useState('#bc4a4b');
   const [secondaryColor, setSecondaryColor] = useState('#0A0A0A');
   const [fontFamily, setFontFamily] = useState('Inter');
+  const [walletAddress, setWalletAddress] = useState('');
 
   useEffect(() => {
     const session = getAuthSession();
@@ -40,6 +43,14 @@ export default function ProgramSettings() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  // Update wallet address when Dynamic wallet connects
+  useEffect(() => {
+    if (primaryWallet?.address && companyId) {
+      updateWalletAddress(primaryWallet.address);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [primaryWallet?.address, companyId]);
 
   const loadCompanyAndSettings = async (username: string) => {
     try {
@@ -61,12 +72,35 @@ export default function ProgramSettings() {
           setPrimaryColor(company.primaryColor || '#bc4a4b');
           setSecondaryColor(company.secondaryColor || '#0A0A0A');
           setFontFamily(company.fontFamily || 'Inter');
+          setWalletAddress(company.walletAddress || '');
         }
       }
     } catch (error) {
       console.error('Error loading company settings:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateWalletAddress = async (address: string) => {
+    try {
+      const response = await fetch('/api/companies/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyId,
+          walletAddress: address,
+        }),
+      });
+
+      if (response.ok) {
+        setWalletAddress(address);
+        console.log('Wallet address updated successfully');
+      }
+    } catch (error) {
+      console.error('Error updating wallet address:', error);
     }
   };
 
@@ -361,6 +395,36 @@ export default function ProgramSettings() {
                   Explain your rewards program - this is what customers see on your public page
                 </p>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Brand Wallet Connection (SSO)</CardTitle>
+              <CardDescription>
+                Connect your crypto wallet for treasury management and transactions
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
+                <p className="text-sm text-blue-900 mb-3">
+                  Connect your wallet to enable Single Sign-On (SSO) and manage your brand's treasury wallet directly.
+                </p>
+                <DynamicWidget />
+              </div>
+              
+              {walletAddress && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-md">
+                  <div className="text-sm font-medium text-green-900 mb-1">Connected Wallet</div>
+                  <div className="text-sm font-mono text-green-800 break-all">
+                    {walletAddress}
+                  </div>
+                </div>
+              )}
+
+              <p className="text-xs text-gray-500">
+                Your wallet will be used for treasury operations, reward distributions, and as an SSO option for login.
+              </p>
             </CardContent>
           </Card>
 

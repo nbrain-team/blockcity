@@ -300,13 +300,22 @@ export default function BrandDashboardPage() {
               </Button>
             </Link>
           )}
+          <Button 
+            variant="outline"
+            onClick={() => {
+              clearAuthSession();
+              router.push('/brand/login');
+            }}
+          >
+            🚪 Logout
+          </Button>
         </div>
       </div>
 
       {/* Top Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="p-6">
-          <div className="text-sm font-medium text-gray-600 mb-2">Total Followers</div>
+          <div className="text-sm font-medium text-gray-600 mb-2">Total Community</div>
           <div className="text-2xl font-bold mb-1">{data.brand.totalFollowers.toLocaleString()}</div>
           <div className="text-xs text-green-600">+{data.metrics.newFollowers} this period</div>
         </Card>

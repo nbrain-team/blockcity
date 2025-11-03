@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
         primaryColor: true,
         secondaryColor: true,
         fontFamily: true,
+        walletAddress: true,
       },
     });
 
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { companyId, name, username, programName, programDetails, logoUrl, primaryColor, secondaryColor, fontFamily } = body;
+    const { companyId, name, username, programName, programDetails, logoUrl, primaryColor, secondaryColor, fontFamily, walletAddress } = body;
 
     if (!companyId) {
       return NextResponse.json(
@@ -85,14 +86,15 @@ export async function PUT(request: NextRequest) {
     const updatedCompany = await prisma.company.update({
       where: { id: companyId },
       data: {
-        name,
-        username,
-        programName,
-        programDetails,
-        logoUrl,
-        primaryColor,
-        secondaryColor,
-        fontFamily,
+        ...(name !== undefined && { name }),
+        ...(username !== undefined && { username }),
+        ...(programName !== undefined && { programName }),
+        ...(programDetails !== undefined && { programDetails }),
+        ...(logoUrl !== undefined && { logoUrl }),
+        ...(primaryColor !== undefined && { primaryColor }),
+        ...(secondaryColor !== undefined && { secondaryColor }),
+        ...(fontFamily !== undefined && { fontFamily }),
+        ...(walletAddress !== undefined && { walletAddress }),
       },
       select: {
         id: true,
@@ -104,6 +106,7 @@ export async function PUT(request: NextRequest) {
         primaryColor: true,
         secondaryColor: true,
         fontFamily: true,
+        walletAddress: true,
       },
     });
 
